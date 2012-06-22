@@ -11,7 +11,7 @@ describe('when setting raven', function() {
 		it('should throw when value does not start with http or https', function() {
 			expect(function() { raven.server('ftp://foobar'); }).toThrow(); 
 			expect(function() { raven.server('bar'); }).toThrow();
-		});
+		}); 
 
 		it('should set the server setting for http', function() {
 			raven.server('http://foobar');
@@ -34,7 +34,7 @@ describe('when setting raven', function() {
 			raven.database('');
 			expect(raven.database()).toBe(undefined);
 		});
-	})
+	}); 
 
 	describe('.username', function() {
 		it('should throw when value is not a string', function() {
@@ -84,8 +84,8 @@ describe('when setting raven', function() {
 			raven.apiKey('Foo');
 			raven.apiKey('');
 			expect(raven.apiKey()).toBe(undefined);
-		})
-	})
+		});
+	});
 
 	describe('.connectionString', function() {
 
@@ -124,6 +124,49 @@ describe('when setting raven', function() {
 		it('should set apiKey', function() {
 			raven.connectionString('Url=http://localhost:80;ApiKey=Bar');
 			expect(raven.apiKey()).toBe('Bar');
-		})
-	}); 
+		});
+	});
+
+	describe('.configure', function() {
+
+		it('should not run when current environment doesn not match', function(){
+			raven.database(''); //Set it to undefined
+			process.env.NODE_ENV = 'Foo';
+			raven.configure('Bar', function() {
+				raven.database('changed');
+			});
+
+			expect(raven.database()).toBe(undefined);
+		});
+
+		it('should run when current environment matches', function() {
+			raven.database(''); //Set it to undefined
+			process.env.NODE_ENV = 'Foo';
+			raven.configure('Foo', function(){
+				raven.database('Bar');
+			});
+
+			expect(raven.database()).toBe('Bar');
+		});
+
+		it('should always run all environment', function() {
+			raven.database(''); //Set it to undefined
+			process.env.NODE_ENV = undefined;
+			raven.configure('all', function() {
+				raven.database('Bar');
+			});
+
+			expect(raven.database()).toBe('Bar');
+		});
+
+		it('should always run when no environment is specified', function(){
+			raven.database(''); //Set it to undefined
+			process.env.NODE_ENV = undefined;
+			raven.configure(function() {
+				raven.database('Bar');
+			});
+
+			expect(raven.database()).toBe('Bar');
+		});
+	});
 });

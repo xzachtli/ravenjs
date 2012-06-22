@@ -3,59 +3,151 @@
 	{
 		"selected_items":
 		[
+			[
+				"write-suc",
+				"write-success"
+			],
+			[
+				"extracti",
+				"extractionsDoc"
+			],
+			[
+				"partitionP",
+				"partitionParam"
+			],
+			[
+				"hostSe",
+				"hostSettingsDoc"
+			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "spec/raven.settings.spec.js",
-			"settings":
-			{
-				"buffer_size": 3612,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "raven.js",
-			"settings":
-			{
-				"buffer_size": 2140,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 311.0,
+		"height": 196.0,
 		"selected_items":
 		[
-			[
-				"Package Control: ",
-				"Package Control: List Packages"
-			],
-			[
-				"Javas",
-				"Set Syntax: JavaScript"
-			],
 			[
 				"java",
 				"Set Syntax: JavaScript"
 			],
 			[
-				"commen",
-				"Toggle Comment"
+				"Text",
+				"Set Syntax: Plain Text"
 			],
 			[
-				"Xml",
-				"Set Syntax: XML"
+				"text",
+				"Set Syntax: Textile"
+			],
+			[
+				"js",
+				"Set Syntax: JSON"
+			],
+			[
+				"JSON",
+				"Set Syntax: JSON"
+			],
+			[
+				"Pack",
+				"Package Control: List Packages"
+			],
+			[
+				"Json",
+				"Set Syntax: JSON"
+			],
+			[
+				"Install",
+				"Package Control: Install Package"
+			],
+			[
+				"javasc",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"npm",
+				"Nodejs::NPM::Command"
+			],
+			[
+				"PackageI",
+				"Package Control: Install Package"
+			],
+			[
+				"Sublime",
+				"SublimeGoogle: search"
+			],
+			[
+				"pow",
+				"Set Syntax: Powershell v2"
+			],
+			[
+				"Power",
+				"Set Syntax: Powershell v2"
+			],
+			[
+				"Uninstal",
+				"Nodejs::NPM::Uninstall"
+			],
+			[
+				"Insta",
+				"Package Control: Install Package"
 			],
 			[
 				"InstallP",
 				"Package Control: Install Package"
 			],
 			[
-				"Install",
+				"Log",
+				"Set Syntax: LaTeX Log"
+			],
+			[
+				"Over",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"Install ",
+				"Package Control: Install Package"
+			],
+			[
+				"Xml",
+				"Set Syntax: XML"
+			],
+			[
+				"xml",
+				"Set Syntax: XML"
+			],
+			[
+				"sublin",
+				"SublimeHg: Open CLI"
+			],
+			[
+				"hg",
+				"SublimeHg: Open Menu"
+			],
+			[
+				"h",
+				"Set Syntax: SublimeHg Command Line"
+			],
+			[
+				"merc",
+				"Set Syntax: Mercurial Status Report"
+			],
+			[
+				"Hg",
+				"Set Syntax: SublimeHg Command Line"
+			],
+			[
+				"c#",
+				"Set Syntax: C#"
+			],
+			[
+				"Install Pa",
 				"Package Control: Install Package"
 			],
 			[
@@ -63,11 +155,11 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 416.0
+		"width": 400.0
 	},
 	"console":
 	{
-		"height": 181.0
+		"height": 125.0
 	},
 	"distraction_free":
 	{
@@ -80,43 +172,145 @@
 	},
 	"file_history":
 	[
-		"/C/Users/Ritesh/AppData/Roaming/Sublime Text 2/Packages/SublimeLinter/SublimeLinter.sublime-settings",
-		"/C/Users/Ritesh/AppData/Roaming/Sublime Text 2/Packages/Package Control/Package Control.sublime-settings",
-		"/C/Dev/projects/ravenjs/index.js",
-		"/C/Users/Ritesh/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
-		"/C/Dev/projects/ravenjs/package.json",
-		"/C/Dev/projects/ravenjs/spec/sample.spec.js",
-		"/C/Users/Ritesh/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/Monokai.tmTheme",
-		"/C/Users/Ritesh/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/Twilight.tmTheme",
-		"/C/Program Files/Sublime Text 2/Pristine Packages/Color Scheme - Default.sublime-package",
-		"/C/Dev/projects/videobrowser/videobrowser.api/package.json",
-		"/C/Dev/projects/videobrowser/videobrowser.api/app.js",
-		"/C/Dev/projects/videobrowser/videobrowser.api/lib/raven/RavenUtils.js",
-		"/C/Users/Ritesh/Downloads/csainty-node-raven-08f1828/csainty-node-raven-08f1828/package.json",
-		"/C/Dev/projects/videobrowser/videobrowser.api/lib/raven/client.js",
-		"/C/Dev/projects/videobrowser/videobrowser.api/lib/raven/ravenhttpclient.js",
-		"/C/Dev/projects/videobrowser/videobrowser.api/lib/ravendb.js",
-		"/C/Users/Ritesh/AppData/Roaming/Sublime Text 2/Packages/User/SublimeLinter.sublime-settings",
-		"/C/Users/Ritesh/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
-		"//drobofs/Videos/VideoBrowser/Errors/Errors.xml",
-		"/C/Users/Ritesh/Documents/IISExpress/config/applicationhost.config",
-		"/Z/VideoBrowser/Errors/Errors.xml",
-		"//rraoepx/d$/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/Processors/IProcessors.cs",
-		"//rraoepx/d$/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/Processors/Buffer.cs",
-		"//rraoepx/d$/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Core/Guard.cs",
-		"//rraoepx/d$/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Core/Extensions/CommonExtensions.cs",
-		"//rraoepx/d$/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Core/Extensions/CollectionExtensions.cs",
-		"/C/Temp/EncodingPreset.xml"
+		"/D/Dev/projects/social/CommApps/Search/Search.Web/Controllers/SearchController.cs",
+		"/D/Dev/projects/social/CommApps/Search/Search.Web.Api/Controllers/ApiController.cs",
+		"/D/Dev/projects/social/CommApps/Search/Search.Web/Views/Search/Search.cshtml",
+		"/D/Dev/projects/social/CommApps/Search/Search/Resources/SearchResources.HU.resx",
+		"/D/Dev/sandbox/ravenjs/lib/ravenoptions.js",
+		"/D/Temp/ravenjs_api_concept.js",
+		"/C/Users/rrao/AppData/Roaming/Sublime Text 2/Packages/User/SublimeLinter.sublime-settings",
+		"/C/Users/rrao/AppData/Roaming/Sublime Text 2/Packages/SublimeLinter/SublimeLinter.sublime-settings",
+		"/D/Temp/Epx.DataAcquisition.Service_RC_4/EnvironmentConfigs/RR1EPXVM32.ps1",
+		"/D/Dev/sandbox/ravenjs/index.js",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/AcquisitionService.cs",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/ServiceActions/AcquisitionServiceInstaller.cs",
+		"/D/Dev/projects/social/BuildScript.ps1",
+		"/D/Temp/api_response_2.json",
+		"/D/Temp/api_response.txt",
+		"/D/Dev/Projects/social/SocialRootWeb/Web.config",
+		"/D/Dev/sandbox/ravenjs/package.json",
+		"/D/Dev/sandbox/NodeJs/express/package.json",
+		"/D/Dev/sandbox/NodeJs/express/app.js",
+		"/C/Users/rrao/AppData/Roaming/Sublime Text 2/Packages/Color Scheme - Default/Twilight.tmTheme",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition-20120615/deploy.ps1",
+		"/C/Users/rrao/AppData/Roaming/Sublime Text 2/Packages/Theme - Default/Widgets.stTheme",
+		"/C/Users/rrao/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/App.config",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/EnvironmentConfigs/RR1EPX02.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/EnvironmentConfigs/RR1EPXVM32.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/EnvironmentConfigs/RR1EPXVM33.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/EnvironmentConfigs/RR1EPXVM34.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/EnvironmentConfigs/RR1EPXVM50.ps1",
+		"/D/Dev/Projects/social/Framework/BuildScript.ps1",
+		"/D/Dev/Projects/social/Search/default.ps1",
+		"/D/Downloads/Epx.DataAcquisition.Service_19/deploy.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/deploy.ps1",
+		"/D/Downloads/Epx.DataAcquisition.Service_19/EnvironmentConfigs/RR1EPX02.ps1",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_06_11_2012_04_36_57.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_11_2012_04_14_48.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_11_2012_04_30_27.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_11_2012_04_28_51.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_11_2012_04_29_45.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_11_2012_04_14_23.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_11_2012_04_11_30.err",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/_package/Epx.DataAcquisition.Service_0/EnvironmentConfigs/RR1EPXVM32.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/ServiceActions/InstallServiceAction.cs",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_08_2012_11_23_21.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_08_2012_11_23_21.err",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_06_06_2012_05_08_23_3.xml",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_08_2012_10_17_09.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_06_08_2012_10_17_09.err",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_06_06_2012_05_08_23_1.xml",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_06_06_2012_05_05_32_1.xml",
+		"/D/Dev/projects/social/Search/Search.Web.Api/Controllers/ApiController.cs",
+		"//Rr1epxvm50/d$/Extraction/MSDN_VStudio_EN_US 5-31/MSDN_VStudio_EN_US_05_31_2012_12_27_57.log.2",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/default.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/Services/PerformanceMonitor.cs",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_06_05_2012_05_00_35.log",
+		"/D/Temp/sampleout.xml",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/_package/Epx.DataAcquisition.Service_0/deploy.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/deploy.bat",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/EnvironmentConfigs/RR1EOX02.ps1",
+		"/D/Temp/Deploy/EnvironmentConfigs/RR1EPXVM32.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/tools/psake/psake.cmd",
+		"/D/Temp/Deploy/deploy.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/_deploy/ExtractionSettings.config",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/bin/Debug/ExtractionSettings.config",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/bin/Debug/Microsoft.Epx.DataAcquisition.Host.exe.config",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/build.bat",
+		"/D/Dev/projects/social/Search/default.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Configuration/Environments.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Configuration/RR1EPX033.ps1",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Configuration/RR1EPX032.ps1",
+		"/D/Dev/projects/SocialBuilds/Configuration/ENVIRONMENTS/ctpPhx.ps1",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_32_28.err",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_17_50_1.xml",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_23_23.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_06_34.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_13_58_1.xml",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_06_34_1.xml",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/package.ps1",
+		"/D/Temp/MSDN_DotNet_EN_US_05_30_2012_05_20_05.log.1",
+		"//Rr1epxvm50/d$/Extraction/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_05_20_05_1.xml",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_04_48.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_31_2012_11_04_48.err",
+		"//Rr1epxvm50/d$/Extraction/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_05_20_05.log.1",
+		"//Rr1epxvm50/d$/Extraction/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_05_20_05.log.52",
+		"//Rr1epxvm50/d$/Extraction/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_05_20_05_3.xml",
+		"//Rr1epxvm50/d$/Extraction/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_05_20_05.log.51",
+		"//Rr1epxvm50/d$/Extraction/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_05_20_05_4.xml",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_04_07_32.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_03_53_40.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_03_55_29.err",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_03_55_29.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_03_47_58.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_30_2012_03_45_06.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_02_50_58.log",
+		"/D/Dev/projects/social/Search/Search.Web/Filters/ComScorePersistentCookie.cs",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_25_27.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_02_31_23.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_02_45_28.err",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_02_45_28.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_17_48.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_17_48.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_17_48_1.xml",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_03_30.err",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_03_30.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_11_36.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_11_36.err",
+		"/D/Dev/scratch/Microsoft.Epx.DataAcquisition/Host/Processors/StructuredDataWriter.cs",
+		"/D/Dev/scratch/Microsoft.Epx.DataAcquisition/Host/log4net.config",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_01_55_32.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_01_57_41.log",
+		"/D/Dev/projects/epx/Microsoft.Epx.DataAcquisition/Host/bin/Debug/Log/DataAcquisitionLog.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_02_01_36.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_01_48_33.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_01_51_19.log",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_29_2012_01_48_33.err",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_01_52_09.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_10_23_17_1.xml",
+		"//Rr1epxvm32/ExtractionFeeds/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_24_2012_05_11_06.log",
+		"//Rr1epxvm32/d$/service/Log/DataAcquisitionLog.log",
+		"//Rr1epxvm32/ExtractionFeeds/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_24_2012_05_30_28.log",
+		"/D/Temp/ExtractionOutput/MSDN_DotNet_EN_US/MSDN_DotNet_EN_US_05_29_2012_10_23_17.log",
+		"//Rr1epxvm32/ExtractionFeeds/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_24_2012_05_11_14.log",
+		"//Rr1epxvm32/ExtractionFeeds/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_24_2012_05_11_14.err",
+		"//Rr1epxvm32/ExtractionFeeds/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_24_2012_05_11_14_1.xml",
+		"/D/Temp/ExtractionOutput/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_24_2012_04_58_50.err",
+		"//Rr1epxvm32/d$/service/Microsoft.Epx.DataAcquisition.Host.exe.config",
+		"//Rr1epxvm32/d$/service/log4net.config",
+		"//Rr1epxvm32/ExtractionFeeds/MSDN_VStudio_EN_US/MSDN_VStudio_EN_US_05_24_2012_05_04_37.log"
 	],
 	"find":
 	{
-		"height": 39.0
+		"height": 38.0
 	},
 	"find_in_files":
 	{
 		"height": 0.0,
 		"where_history":
 		[
+			"D:\\Dev\\projects\\social\\Search"
 		]
 	},
 	"find_state":
@@ -124,271 +318,72 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"\""
+			"}",
+			"Copy-Framework-To-Commapps",
+			"\"",
+			"\\\"",
+			"\"",
+			"                            \"",
+			"data",
+			"Brand",
+			"\"",
+			"eq",
+			"[ERROR]",
+			"Error",
+			"Cancelling",
+			"Cancel",
+			"Output",
+			"cancel",
+			"8kb3ddd4",
+			"\"",
+			"\";",
+			"        private const string ",
+			"Walkthrough: Creating and Using a Static Library (C++)",
+			"Walkthrough: Creating and Using a Static Library (C++)\n",
+			"hcwywcse",
+			"destPat",
+			"Title",
+			"Example",
+			"Reference.",
+			"CodeSnippetType",
+			"MetadataKeyEnum",
+			"SectionType",
+			"X-UA",
+			"execSql",
+			"db-create",
+			"db-init-dev",
+			"db-init-upgrade"
 		],
 		"highlight": true,
-		"in_selection": true,
+		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
 			"'",
-			","
+			""
 		],
 		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
-		"whole_word": false,
+		"whole_word": true,
 		"wrap": true
 	},
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "spec/raven.settings.spec.js",
-					"settings":
-					{
-						"buffer_size": 3612,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1143,
-								1143
-							]
-						],
-						"settings":
-						{
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"text-indent": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": false,
-								"evil": true,
-								"laxcomma": true,
-								"node": true,
-								"regexdash": true,
-								"sub": true,
-								"supernew": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": false,
-							"sublimelinter_delay": 0.5,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": false,
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"Python Django": "python"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
-				{
-					"buffer": 1,
-					"file": "raven.js",
-					"settings":
-					{
-						"buffer_size": 2140,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								988,
-								988
-							]
-						],
-						"settings":
-						{
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"text-indent": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": false,
-								"evil": true,
-								"laxcomma": true,
-								"node": true,
-								"regexdash": true,
-								"sub": true,
-								"supernew": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": false,
-							"sublimelinter_delay": 0.5,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": false,
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"Python Django": "python"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 552.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 39.0
+		"height": 38.0
 	},
 	"input":
 	{
-		"height": 39.0
+		"height": 30.0
 	},
 	"layout":
 	{
@@ -399,18 +394,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.5,
 			1.0
 		],
 		"rows":
@@ -422,7 +410,7 @@
 	"menu_visible": true,
 	"replace":
 	{
-		"height": 72.0
+		"height": 62.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -430,6 +418,22 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"acquisitionse",
+				"Microsoft.Epx.DataAcquisition/Host/ServiceActions/AcquisitionServiceInstaller.cs"
+			],
+			[
+				"acqu",
+				"Microsoft.Epx.DataAcquisition/Host/AcquisitionService.cs"
+			],
+			[
+				"refinement",
+				"Search.IntegrationTests/Refinements/Refinement.cs"
+			],
+			[
+				"refinemen",
+				"Search.IntegrationTests/Refinements/Refinements.xml"
+			]
 		],
 		"width": 0.0
 	},
@@ -442,9 +446,9 @@
 		"width": 380.0
 	},
 	"show_minimap": true,
-	"show_open_files": false,
+	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 242.0,
+	"side_bar_width": 224.0,
 	"status_bar_visible": true
 }

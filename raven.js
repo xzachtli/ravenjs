@@ -3,8 +3,20 @@ var qs = require('querystring'),
 
 
 var settings = {
-		server: 'http://localhost:80'
+		server: 'http://localhost:80',
+		keyFinder: defaultKeyFinder,
+		keyGenerator: defaultKeyGenerator
 };
+
+function defaultKeyFinder(doc) {
+	if (!doc) return undefined;
+	if (doc.hasOwnProperty('id')) return doc.id;
+	if (doc.hasOwnProperty('Id')) return doc.Id;
+}
+
+function defaultKeyGenerator(doc, client) {
+	//TODO:
+}
 
 exports.connectionString = function(connStr) {
 	var self = this;
@@ -13,7 +25,7 @@ exports.connectionString = function(connStr) {
 
 	var values = qs.parse(connStr, ';', '=');
 	if (!values.Url) throw new Error('Required connection string property "Url" was not specified!');
-	 
+
 	self.server(values.Url);
 	self.database(values.Database);
 	self.username(values.UserName);
@@ -24,8 +36,7 @@ exports.connectionString = function(connStr) {
 exports.server = function(server) {
 	if (!arguments.length) return settings.server;
 	if (!_.isString(server)) throw new Error('Expected a valid raven server name');
-	console.log(server.indexOf('http://'));
-	if (server.indexOf('http://') === -1 && server.indexOf('https://') === -1) throw new Error('Expected a server address with http:// or https://');
+	if (!~server.indexOf('http://') && !~server.indexOf('https://')) throw new Error('Expected a server address with http:// or https://');
 	settings.server = server;
 };
 
@@ -71,5 +82,29 @@ exports.apiKey = function(apiKey) {
 
 	if (!_.isString(apiKey)) throw new Error('Expected a string for apiKey');
 	settings.apiKey = apiKey;
-}
+};
+
+exports.keyFinder = function(fn) {
+	if (!fn) settings.keyFinder = defaultKeyFinder;
+	if (!_(fin).isFunction()) throw new Error('Expected a valid function to use as the default key finder.');
+	settings.keyFinder = fn;
+};
+
+exports.keyGenerator = function(fn) {
+	if (!fn) settings.keyGenerator = defaultKeyGenerator;
+	if (!_(fn).isFunction()) throw new Error('Expected a valid function to use as the default key generator.');
+	settings.keyGenerator = fn;
+};
+
+exports.defaultKeyFinder = defaultKeyFinder;
+exports.defaultKeyGenerator = defaultKeyGenerator;
  
+exports.configure = function(env, fn) {
+	if (_(env).isFunction()) {
+		fn = env;
+		env = 'all';
+	}
+
+	var currentEnv = process.env.NODE_ENV || 'development';
+	if ('all' === env || ~env.indexOf(currentEnv)) fn.call(this);
+};
