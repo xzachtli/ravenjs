@@ -1,5 +1,6 @@
 var qs = require('querystring'),	
-		_ = require('underscore');
+	_ = require('underscore'),
+	RavenClient = require('./lib/ravenClient.js');
 
 
 var settings = {
@@ -86,7 +87,7 @@ exports.apiKey = function(apiKey) {
 
 exports.keyFinder = function(fn) {
 	if (!fn) settings.keyFinder = defaultKeyFinder;
-	if (!_(fin).isFunction()) throw new Error('Expected a valid function to use as the default key finder.');
+	if (!_(fn).isFunction()) throw new Error('Expected a valid function to use as the default key finder.');
 	settings.keyFinder = fn;
 };
 
@@ -96,9 +97,7 @@ exports.keyGenerator = function(fn) {
 	settings.keyGenerator = fn;
 };
 
-exports.defaultKeyFinder = defaultKeyFinder;
-exports.defaultKeyGenerator = defaultKeyGenerator;
- 
+
 exports.configure = function(env, fn) {
 	if (_(env).isFunction()) {
 		fn = env;
@@ -107,4 +106,20 @@ exports.configure = function(env, fn) {
 
 	var currentEnv = process.env.NODE_ENV || 'development';
 	if ('all' === env || ~env.indexOf(currentEnv)) fn.call(this);
+};
+
+//exposing default key finder and generator.
+exports.defaultKeyFinder = defaultKeyFinder;
+
+exports.defaultKeyGenerator = defaultKeyGenerator;
+
+exports.connect = function(options) {
+	if (!arguments.length) return new RavenClient(settings);
+	return new RavenClient({
+		server: options.server || settings.server,
+		database: options.database || settings.database,
+		username: options.username || settings.username,
+		password: options.password || settings.password,
+		apiKey: options.apiKey || settings.apiKey
+	});
 };
