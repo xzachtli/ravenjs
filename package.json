@@ -1,0 +1,9 @@
+{
+		"name": "ravenjs"
+	,	"version": "0.0.1"
+	,	"private": true
+	,	"dependencies": {
+				"request": ">= 1.0.0"
+			,	"underscore": ">= 1.0.0"
+		}
+}
