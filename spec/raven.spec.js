@@ -1,5 +1,5 @@
 var raven = require('../raven.js'),
-	RavenClient = require('../lib/ravenClient.js');
+	RavenClient = require('../lib/client.js');
 
 describe('raven.connect', function() {
 	beforeEach(function() {

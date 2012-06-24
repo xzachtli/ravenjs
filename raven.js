@@ -1,11 +1,11 @@
 var qs = require('querystring'),	
 	_ = require('underscore'),
-	RavenClient = require('./lib/ravenClient.js');
+	RavenClient = require('./lib/client.js');
 
 
 var settings = {
 		server: 'http://localhost:80',
-		keyFinder: defaultKeyFinder,
+		keyFinder: defaultKeyFinder, 
 		keyGenerator: defaultKeyGenerator
 };
 
