@@ -3,7 +3,7 @@ var raven = require('../raven.js'),
 
 describe('raven.connect', function() {
 	beforeEach(function() {
-		raven.connectionString('Url=http://localhost;Database=Foo;UserName=Bar;Password=Baz;ApiKey=FooBar');	
+		raven.connectionString('Url=http://localhost;Database=Foo;UserName=Bar;Password=Baz;ApiKey=FooBar');
 	});
 
 	it('creates a raven client', function() {
@@ -14,7 +14,7 @@ describe('raven.connect', function() {
 		
 		var client = raven.connect();
 		expect(client.settings.server).toBe('http://localhost');
-		expect(client.settings.database).toBe('Foo'); 
+		expect(client.settings.database).toBe('Foo');
 		expect(client.settings.username).toBe('Bar');
 		expect(client.settings.password).toBe('Baz');
 		expect(client.settings.apiKey).toBe('FooBar');
