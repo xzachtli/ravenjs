@@ -28,7 +28,7 @@ describe('raven.get', function() {
 
 		client.get('/docs/foo', function(error, data) {
 			expect(error).not.toBeNull();
-			done();			
+			done();
 		});
 	});
 
@@ -77,11 +77,11 @@ describe('raven.get', function() {
 			expect(error).toBeNull();
 			expect(data).not.toBeNull();
 			expect(data.__raven__).toBeDefined();
-
+			expect(data.__raven__.id).toBe('/docs/foo');
 			expect(data.__raven__.etag).toBe('00000-0000-000-0001');
 			expect(data.__raven__.entityName).toBe('FooBar');
 			expect(data.__raven__.clrType).toBe('Foo.Bar.Baz');
 			done();
 		});
 	});
-}); 
+});
