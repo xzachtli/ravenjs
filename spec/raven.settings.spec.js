@@ -1,4 +1,4 @@
-var raven = require('../raven.js');
+var raven = require('../raven');
 
 describe('when setting raven', function() {
 

@@ -1,6 +1,6 @@
 var qs = require('querystring'),
 	_ = require('underscore'),
-	RavenClient = require('./lib/client.js');
+	RavenClient = require('./lib/ravenClient');
 
 
 var settings = {

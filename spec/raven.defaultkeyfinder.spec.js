@@ -1,4 +1,4 @@
-var raven = require('../raven.js');
+var raven = require('../raven');
 
 describe('raven.defaultKeyFinder', function() {
 
