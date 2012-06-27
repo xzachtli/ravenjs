@@ -1,4 +1,5 @@
-var raven = require('../raven');
+var raven = require('../raven'),
+	HiLoIdGenerator = require('../lib/hiloIdGenerator');
 
 describe('when setting raven', function() {
 
@@ -167,6 +168,70 @@ describe('when setting raven', function() {
 			});
 
 			expect(raven.database()).toBe('Bar');
+		});
+	});
+
+	describe('raven.defaultIdFinder', function() {
+
+		it('should return undefined for undefined documents', function(){
+			expect(raven.defaultIdFinder()).toBe(undefined);
+		});
+
+		it('should return key from id property', function(){
+			expect(raven.defaultIdFinder({
+				id: 'Foo'
+			})).toBe('Foo');
+		});
+
+		it('should return key from Id property', function() {
+			expect(raven.defaultIdFinder({
+				Id: 'Foo'
+			})).toBe('Foo');
+		});
+
+		it ('should return undefined for no matched id properties', function() {
+			expect(raven.defaultIdFinder({
+				Bar: 'Foo'
+			})).toBe(undefined);
+		});
+	});
+
+	describe('raven.defaultIdGenerator', function() {
+
+		it('should throw when settings is null', function() {
+			expect(function(){ raven.defaultIdGenerator(null); }).toThrow();
+		});
+
+		it('should throw when setting does not have a server property', function() {
+			expect(function(){ raven.defaultIdGenerator({ }, null); }).toThrow();
+		});
+
+		it('should throw when callback is null', function() {
+			expect(function() { raven.defaultIdGenerator({ server: 'foo' }); }).toThrow();
+		});
+
+		it('should return error when hilo generator returns error', function(done) {
+			
+			spyOn(HiLoIdGenerator.prototype, 'getId')
+				.andCallFake(function(cb) { cb(new Error('Failed')); });
+
+			raven.defaultIdGenerator({ server: 'foo'}, function(error, id) {
+				expect(error).toBeDefined();
+				expect(error.message).toBe('Failed');
+				expect(id).not.toBeDefined();
+				done();
+			});
+		});
+
+		it('should return id from generator', function(done) {
+			spyOn(HiLoIdGenerator.prototype, 'getId')
+				.andCallFake(function(cb) { cb(undefined, 123); });
+
+			raven.defaultIdGenerator({ server: 'foo' }, function(error, id) {
+				expect(error).not.toBeDefined();
+				expect(id).toBe(123);
+				done();
+			});
 		});
 	});
 });

@@ -1,22 +1,32 @@
 var qs = require('querystring'),
 	_ = require('underscore'),
-	RavenClient = require('./lib/ravenClient');
+	RavenClient = require('./lib/ravenClient'),
+	HiLoIdGenerator = require('./lib/hiloIdGenerator');
 
 
 var settings = {
 		server: 'http://localhost:80',
-		keyFinder: defaultKeyFinder,
-		keyGenerator: defaultKeyGenerator
+		idFinder: defaultIdFinder,
+		idGenerator: defaultIdGenerator
 };
 
-function defaultKeyFinder(doc) {
+function defaultIdFinder(doc) {
 	if (!doc) return undefined;
+	if (doc.__raven__ && doc.__raven__.id) return doc.__raven__.id;
 	if (doc.hasOwnProperty('id')) return doc.id;
 	if (doc.hasOwnProperty('Id')) return doc.Id;
 }
 
-function defaultKeyGenerator(doc, client) {
-	//TODO:
+function defaultIdGenerator(settings, callback) {
+	if (!settings) throw Error('Expected a valid setings object.');
+	if (!settings.server) throw Error('Invalid settings. Expected server property.');
+	if (!callback || !_(callback).isFunction) throw Error('Exepected a valid callback function.');
+
+	var generator = new HiLoIdGenerator(settings);
+	generator.getId(function(error, id) {
+		if (error) return callback(error);
+		return callback(undefined, id);
+	});
 }
 
 exports.connectionString = function(connStr) {
@@ -85,16 +95,16 @@ exports.apiKey = function(apiKey) {
 	settings.apiKey = apiKey;
 };
 
-exports.keyFinder = function(fn) {
-	if (!fn) settings.keyFinder = defaultKeyFinder;
+exports.idFinder = function(fn) {
+	if (!fn) return settings.idFinder = defaultidFinder;
 	if (!_(fn).isFunction()) throw new Error('Expected a valid function to use as the default key finder.');
-	settings.keyFinder = fn;
+	settings.idFinder = fn;
 };
 
-exports.keyGenerator = function(fn) {
-	if (!fn) settings.keyGenerator = defaultKeyGenerator;
+exports.idGenerator = function(fn) {
+	if (!fn) return settings.idGenerator = defaultIdGenerator;
 	if (!_(fn).isFunction()) throw new Error('Expected a valid function to use as the default key generator.');
-	settings.keyGenerator = fn;
+	settings.idGenerator = fn;
 };
 
 
@@ -109,9 +119,9 @@ exports.configure = function(env, fn) {
 };
 
 //exposing default key finder and generator.
-exports.defaultKeyFinder = defaultKeyFinder;
+exports.defaultIdFinder = defaultIdFinder;
 
-exports.defaultKeyGenerator = defaultKeyGenerator;
+exports.defaultIdGenerator = defaultIdGenerator;
 
 exports.connect = function(options) {
 	if (!arguments.length) return new RavenClient(settings);
@@ -120,6 +130,8 @@ exports.connect = function(options) {
 		database: options.database || settings.database,
 		username: options.username || settings.username,
 		password: options.password || settings.password,
-		apiKey: options.apiKey || settings.apiKey
+		apiKey: options.apiKey || settings.apiKey,
+		idFinder: options.idFinder || settings.idFinder,
+		idGenerator: options.idGenerator || settings.idGenerator
 	});
 };

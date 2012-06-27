@@ -18,9 +18,9 @@ describe('raven.connect', function() {
 		expect(client.settings.username).toBe('Bar');
 		expect(client.settings.password).toBe('Baz');
 		expect(client.settings.apiKey).toBe('FooBar');
-		expect(client.settings.keyFinder).toBeDefined();
-		expect(client.settings.keyFinder).toBe(raven.defaultKeyFinder);
-		expect(client.settings.keyGenerator).toBe(raven.defaultKeyGenerator);
+		expect(client.settings.idFinder).toBeDefined();
+		expect(client.settings.idFinder).toBe(raven.defaultIdFinder);
+		expect(client.settings.idGenerator).toBe(raven.defaultIdGenerator);
 	});
 
 	it('creates client with overriden server setting', function(){
@@ -54,16 +54,16 @@ describe('raven.connect', function() {
 	});
 
 	it ('creates client with overriden keyFinder setting', function() {
-		var finder = function(document) { };
-		raven.keyFinder(finder);
+		var finder = function(doc) { };
+		raven.idFinder(finder);
 		var client = raven.connect();
-		expect(client.settings.keyFinder).toBe(finder);
+		expect(client.settings.idFinder).toBe(finder);
 	});
 
 	it ('creates client with overriden keyGenerator setting', function() {
-		var generator = function(document, client) { };
-		raven.keyGenerator(generator);
+		var generator = function(doc, settings) { };
+		raven.idGenerator(generator);
 		var client = raven.connect();
-		expect(client.settings.keyGenerator).toBe(generator);
+		expect(client.settings.idGenerator).toBe(generator);
 	});
 }); 
