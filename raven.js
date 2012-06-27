@@ -7,25 +7,27 @@ var qs = require('querystring'),
 var settings = {
 		server: 'http://localhost:80',
 		idFinder: defaultIdFinder,
-		idGenerator: defaultIdGenerator
+		idGenerator: defaultIdGenerator,
+		useOptimisticConcurrency: false
 };
 
 function defaultIdFinder(doc) {
 	if (!doc) return undefined;
-	if (doc.__raven__ && doc.__raven__.id) return doc.__raven__.id;
+	if (doc['@id']) return doc['@id'];
 	if (doc.hasOwnProperty('id')) return doc.id;
 	if (doc.hasOwnProperty('Id')) return doc.Id;
 }
 
 function defaultIdGenerator(settings, callback) {
+	
 	if (!settings) throw Error('Expected a valid setings object.');
 	if (!settings.server) throw Error('Invalid settings. Expected server property.');
 	if (!callback || !_(callback).isFunction) throw Error('Exepected a valid callback function.');
 
 	var generator = new HiLoIdGenerator(settings);
-	generator.getId(function(error, id) {
+	generator.nextId(function(error, id) {
 		if (error) return callback(error);
-		return callback(undefined, id);
+		return callback(undefined, id.toString());
 	});
 }
 
@@ -107,6 +109,11 @@ exports.idGenerator = function(fn) {
 	settings.idGenerator = fn;
 };
 
+exports.useOptimisticConcurrency= function(val) {
+	if (!val) return settings.useOptimisticConcurrency;
+	if (!_(val).isBoolean()) throw new Error('Expected a boolean value when setting useOptimisticConcurrency');
+	settings.useOptimisticConcurrency = val;
+};
 
 exports.configure = function(env, fn) {
 	if (_(env).isFunction()) {
@@ -132,6 +139,7 @@ exports.connect = function(options) {
 		password: options.password || settings.password,
 		apiKey: options.apiKey || settings.apiKey,
 		idFinder: options.idFinder || settings.idFinder,
-		idGenerator: options.idGenerator || settings.idGenerator
+		idGenerator: options.idGenerator || settings.idGenerator,
+		useOptimisticConcurrency: options.useOptimisticConcurrency || settings.useOptimisticConcurrency
 	});
 };

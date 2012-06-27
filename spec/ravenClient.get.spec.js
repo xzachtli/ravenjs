@@ -1,21 +1,33 @@
 var RavenClient = require('../lib/ravenClient'),
 	nock = require('nock');
 
-describe('raven.get', function() {
+describe('RavenClient.get', function() {
 
 	var client;
-
+ 
 	beforeEach(function() {
-		client = new RavenClient({server: 'http://localhost:80'});
+		client = new RavenClient({server: 'http://localhost:80'}); 
 	});
 
+	it('should throw if id is null', function() {
+		expect(function() { client.get(); }).toThrow();
+	});
+
+	it('should throw if id contains invalid paths', function() {
+		expect(function() { client.get( '/foo/bar', function() { }); }).toThrow();
+	});
+
+	it('should throw if callback function is null', function() {
+		expect(function() { client.get('foo'); }).toThrow();
+	});
+ 
 	it('should return error when request fails', function(done) {
 
 		var ravendb = nock('http://localhost:80')
 			.get('/docs/foo')
 			.reply(404);
 
-		client.get('/docs/foo', function(error, data) {
+		client.get('foo', function(error, data) {
 			expect(error).not.toBeNull();
 			done();
 		});
@@ -26,9 +38,9 @@ describe('raven.get', function() {
 			.get('/docs/foo')
 			.reply(200);
 
-		client.get('/docs/foo', function(error, data) {
+		client.get('foo', function(error, data) {
 			expect(error).not.toBeNull();
-			done();
+			done(); 
 		});
 	});
 
@@ -39,7 +51,7 @@ describe('raven.get', function() {
 			.get('/docs/foo')
 			.reply(200, { foo: 'bar'});
 
-		client.get('/docs/foo', function(error, data) {
+		client.get('foo', function(error, data) {
 			expect(error).toBeNull();
 			expect(data).not.toBeNull();
 			expect(data.foo).toBeDefined();
@@ -54,7 +66,7 @@ describe('raven.get', function() {
 			.reply(200, {foo: 'bar'});
 
 		client.settings.database = 'bar';
-		client.get('/docs/foo', function(error, data) {
+		client.get('foo', function(error, data) {
 			expect(error).toBeNull();
 			expect(data).not.toBeNull();
 			done();
@@ -73,14 +85,14 @@ describe('raven.get', function() {
 			.get('/docs/foo')
 			.reply(200, {foo: 'bar'});
 
-		client.get('/docs/foo', function(error, data) {
+		client.get('foo', function(error, data) {
 			expect(error).toBeNull();
-			expect(data).not.toBeNull();
-			expect(data.__raven__).toBeDefined();
-			expect(data.__raven__.id).toBe('/docs/foo');
-			expect(data.__raven__.etag).toBe('00000-0000-000-0001');
-			expect(data.__raven__.entityName).toBe('FooBar');
-			expect(data.__raven__.clrType).toBe('Foo.Bar.Baz');
+			expect(data).not.toBeNull(); 
+			expect(data['@id']).toBe('foo');
+			expect(data['@metadata']).toBeDefined();
+			expect(data['@metadata'].ETag).toBe('00000-0000-000-0001');
+			expect(data['@metadata']['Raven-Entity-Name']).toBe('FooBar');
+			expect(data['@metadata']['Raven-Clr-Type']).toBe('Foo.Bar.Baz');
 			done();
 		});
 	});

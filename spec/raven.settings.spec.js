@@ -1,7 +1,7 @@
 var raven = require('../raven'),
 	HiLoIdGenerator = require('../lib/hiloIdGenerator');
 
-describe('when setting raven', function() {
+describe('raven', function() {
 
 	describe('.server', function() {
 
@@ -73,7 +73,7 @@ describe('when setting raven', function() {
 
 	describe('.apiKey', function() {
 		it('should throw when value is not a string', function() {
-				expect(function() { raven.apiKey(1234); }).toThrow();
+			expect(function() { raven.apiKey(1234); }).toThrow();
 		});
 
 		it('should set apiKey', function() {
@@ -85,6 +85,17 @@ describe('when setting raven', function() {
 			raven.apiKey('Foo');
 			raven.apiKey('');
 			expect(raven.apiKey()).toBe(undefined);
+		});
+	});
+
+	describe('.useOptimisticConcurrency', function() {
+		it('should throw when value is not a boolean', function() {
+			expect(function() { raven.useOptimisticConcurrency('foobar'); }).toThrow();
+		});
+
+		it ('should set value', function() {
+			raven.useOptimisticConcurrency(true);
+			expect(raven.useOptimisticConcurrency()).toBe(true);
 		});
 	});
 
@@ -189,6 +200,12 @@ describe('when setting raven', function() {
 			})).toBe('Foo');
 		});
 
+		it('should return id from @id metadata', function() {
+			var data = { };
+			data['@id'] = 'foo'; 
+			expect(raven.defaultIdFinder(data)).toBe('foo');
+		});
+
 		it ('should return undefined for no matched id properties', function() {
 			expect(raven.defaultIdFinder({
 				Bar: 'Foo'
@@ -212,7 +229,7 @@ describe('when setting raven', function() {
 
 		it('should return error when hilo generator returns error', function(done) {
 			
-			spyOn(HiLoIdGenerator.prototype, 'getId')
+			spyOn(HiLoIdGenerator.prototype, 'nextId')
 				.andCallFake(function(cb) { cb(new Error('Failed')); });
 
 			raven.defaultIdGenerator({ server: 'foo'}, function(error, id) {
@@ -223,8 +240,8 @@ describe('when setting raven', function() {
 			});
 		});
 
-		it('should return id from generator', function(done) {
-			spyOn(HiLoIdGenerator.prototype, 'getId')
+		it('should return id from hilo generator', function(done) {
+			spyOn(HiLoIdGenerator.prototype, 'nextId')
 				.andCallFake(function(cb) { cb(undefined, 123); });
 
 			raven.defaultIdGenerator({ server: 'foo' }, function(error, id) {
