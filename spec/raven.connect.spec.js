@@ -4,6 +4,7 @@ var raven = require('../raven'),
 describe('raven', function() {
 
 	describe('.connect', function() {
+
 		beforeEach(function() {
 			raven.connectionString('Url=http://localhost;Database=Foo;UserName=Bar;Password=Baz;ApiKey=FooBar');
 		});
@@ -56,7 +57,7 @@ describe('raven', function() {
 		});
 
 		it ('creates client with overriden keyFinder setting', function() {
-			var finder = function(doc) { };
+			var finder = function(doc) {  };
 			raven.idFinder(finder);
 			var client = raven.connect();
 			expect(client.settings.idFinder).toBe(finder);
@@ -69,4 +70,4 @@ describe('raven', function() {
 			expect(client.settings.idGenerator).toBe(generator);
 		});
 	});
-}); 
+});

@@ -13,6 +13,7 @@ var settings = {
 
 function defaultIdFinder(doc) {
 	if (!doc) return undefined;
+	console.log('default id finder called');
 	if (doc['@id']) return doc['@id'];
 	if (doc.hasOwnProperty('id')) return doc.id;
 	if (doc.hasOwnProperty('Id')) return doc.Id;
@@ -113,6 +114,13 @@ exports.useOptimisticConcurrency= function(val) {
 	if (!val) return settings.useOptimisticConcurrency;
 	if (!_(val).isBoolean()) throw new Error('Expected a boolean value when setting useOptimisticConcurrency');
 	settings.useOptimisticConcurrency = val;
+};
+
+exports.proxy = function(val) {
+	if(!val) return settings.proxy;
+	if (!_.isString(val)) throw new Error('Expected a valid proxy server address.');
+	if (!~val.indexOf('http://') && !~val.indexOf('https://')) throw new Error("Invaid proxy address scheme. Expected http or https scheme.");
+	settings.proxy = val;
 };
 
 exports.configure = function(env, fn) {

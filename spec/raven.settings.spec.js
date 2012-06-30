@@ -10,13 +10,13 @@ describe('raven', function() {
 		});
 
 		it('should throw when value does not start with http or https', function() {
-			expect(function() { raven.server('ftp://foobar'); }).toThrow(); 
+			expect(function() { raven.server('ftp://foobar'); }).toThrow();
 			expect(function() { raven.server('bar'); }).toThrow();
-		}); 
+		});
 
 		it('should set the server setting for http', function() {
 			raven.server('http://foobar');
-			expect(raven.server()).toBe('http://foobar'); 
+			expect(raven.server()).toBe('http://foobar');
 		});
 	});
 
@@ -35,7 +35,7 @@ describe('raven', function() {
 			raven.database('');
 			expect(raven.database()).toBe(undefined);
 		});
-	}); 
+	});
 
 	describe('.username', function() {
 		it('should throw when value is not a string', function() {
@@ -115,7 +115,7 @@ describe('raven', function() {
 
 		it('should set server', function() {
 			raven.connectionString('Url=http://localhost:80');
-			expect(raven.server()).toBe('http://localhost:80');  
+			expect(raven.server()).toBe('http://localhost:80');
 		});
 
 		it('should set database', function() {
@@ -202,7 +202,7 @@ describe('raven', function() {
 
 		it('should return id from @id metadata', function() {
 			var data = { };
-			data['@id'] = 'foo'; 
+			data['@id'] = 'foo';
 			expect(raven.defaultIdFinder(data)).toBe('foo');
 		});
 
@@ -246,7 +246,7 @@ describe('raven', function() {
 
 			raven.defaultIdGenerator({ server: 'foo' }, function(error, id) {
 				expect(error).not.toBeDefined();
-				expect(id).toBe(123);
+				expect(id).toBe('123');
 				done();
 			});
 		});

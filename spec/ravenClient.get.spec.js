@@ -6,7 +6,7 @@ describe('RavenClient.get', function() {
 	var client;
  
 	beforeEach(function() {
-		client = new RavenClient({server: 'http://localhost:80'}); 
+		client = new RavenClient({server: 'http://localhost:80'});
 	});
 
 	it('should throw if id is null', function() {
@@ -29,6 +29,7 @@ describe('RavenClient.get', function() {
 
 		client.get('foo', function(error, data) {
 			expect(error).not.toBeNull();
+			ravendb.done();
 			done();
 		});
 	});
@@ -40,7 +41,8 @@ describe('RavenClient.get', function() {
 
 		client.get('foo', function(error, data) {
 			expect(error).not.toBeNull();
-			done(); 
+			ravendb.done();
+			done();
 		});
 	});
 
@@ -55,6 +57,7 @@ describe('RavenClient.get', function() {
 			expect(error).toBeNull();
 			expect(data).not.toBeNull();
 			expect(data.foo).toBeDefined();
+			ravendb.done();
 			done();
 		});
 	});
@@ -69,6 +72,7 @@ describe('RavenClient.get', function() {
 		client.get('foo', function(error, data) {
 			expect(error).toBeNull();
 			expect(data).not.toBeNull();
+			ravendb.done();
 			done();
 		});
 	});
@@ -87,12 +91,13 @@ describe('RavenClient.get', function() {
 
 		client.get('foo', function(error, data) {
 			expect(error).toBeNull();
-			expect(data).not.toBeNull(); 
+			expect(data).not.toBeNull();
 			expect(data['@id']).toBe('foo');
 			expect(data['@metadata']).toBeDefined();
 			expect(data['@metadata'].ETag).toBe('00000-0000-000-0001');
 			expect(data['@metadata']['Raven-Entity-Name']).toBe('FooBar');
 			expect(data['@metadata']['Raven-Clr-Type']).toBe('Foo.Bar.Baz');
+			ravendb.done();
 			done();
 		});
 	});

@@ -15,22 +15,23 @@ describe('HiLoGenerator', function() {
 
 		it('should get next id for collection', function(done) {
 			var generator = new HiLoIdGenerator( {server: 'http://localhost:81', collection: 'foobar' });
-			generator.cache['/Raven/HiLo_foobar'] = { maxRange: 100, currentId: 1 };
+			generator.cache['/docs/Raven/HiLo_foobar'] = { maxRange: 100, currentId: 1 };
 			generator.nextId(function(error, id) {
 				expect(error).not.toBeDefined();
 				expect(id).toBe(2);
-				expect(generator.cache['/Raven/HiLo_foobar'].currentId).toBe(2);
+				expect(generator.cache['/docs/Raven/HiLo_foobar'].currentId).toBe(2);
+
 				done();
 			});
 		});
 
 		it ('should get next id for database', function(done) {
 			var generator = new HiLoIdGenerator( {server: 'http://localhost:81', database: 'foobar'});
-			generator.cache['/databases/foobar/Raven/HiLo'] = { maxRange: 100, currentId: 1};
+			generator.cache['/databases/foobar/docs/Raven/HiLo'] = { maxRange: 100, currentId: 1};
 			generator.nextId(function(error, id) {
 				expect(error).not.toBeDefined();
 				expect(id).toBe(2);
-				expect(generator.cache['/databases/foobar/Raven/HiLo'].currentId).toBe(2);
+				expect(generator.cache['/databases/foobar/docs/Raven/HiLo'].currentId).toBe(2);
 				done();
 			});
 		});
@@ -42,11 +43,11 @@ describe('HiLoGenerator', function() {
 				collection: 'baz'
 			});
 
-			generator.cache['/databases/foobar/Raven/HiLo_baz'] = { maxRange: 100, currentId: 1};
+			generator.cache['/databases/foobar/docs/Raven/HiLo_baz'] = { maxRange: 100, currentId: 1};
 			generator.nextId(function(error, id) {
 				expect(error).not.toBeDefined();
 				expect(id).toBe(2);
-				expect(generator.cache['/databases/foobar/Raven/HiLo_baz'].currentId).toBe(2);
+				expect(generator.cache['/databases/foobar/docs/Raven/HiLo_baz'].currentId).toBe(2);
 				done();
 			});
 		});
@@ -58,7 +59,7 @@ describe('HiLoGenerator', function() {
 			beforeEach(function() {
 				generator = new HiLoIdGenerator({ server: 'http://localhost' });
 				cachedRange = { maxRange: 100, currentId: 100 };
-				generator.cache['/Raven/HiLo'] = cachedRange;
+				generator.cache['/docs/Raven/HiLo'] = cachedRange;
 			});
 
 			it('should return error when getting current hilo range fails', function(done) {
@@ -78,7 +79,7 @@ describe('HiLoGenerator', function() {
 					var currentMax = { currentMax: 100 };
 
 					spyOn(HiLoIdGenerator.prototype, 'getCurrentMax')
-						.andCallFake(function(settings, path, callback) { 
+						.andCallFake(function(settings, path, callback) {
 							callback (undefined, currentMax);
 						});
 
@@ -93,6 +94,8 @@ describe('HiLoGenerator', function() {
 						expect(id).toBe(101);
 						expect(cachedRange.currentId).toBe(101);
 						expect(cachedRange.maxRange).toBe(200);
+						expect(generator.getCurrentMax).toHaveBeenCalled();
+						expect(generator.updateCurrentMax).toHaveBeenCalled();
 						done();
 					});
 				});
@@ -101,7 +104,7 @@ describe('HiLoGenerator', function() {
 
 					var currentMax = { currentMax: 100 };
 					spyOn(HiLoIdGenerator.prototype, 'getCurrentMax')
-						.andCallFake(function(settings, path, callback) { 
+						.andCallFake(function(settings, path, callback) {
 							callback (undefined, currentMax);
 						});
 
@@ -115,6 +118,8 @@ describe('HiLoGenerator', function() {
 						expect(id).not.toBeDefined();
 						expect(cachedRange.maxRange).toBe(100);
 						expect(cachedRange.currentId).toBe(100);
+						expect(generator.getCurrentMax).toHaveBeenCalled();
+						expect(generator.updateCurrentMax).toHaveBeenCalled();
 						done();
 					});
 				});
@@ -138,6 +143,8 @@ describe('HiLoGenerator', function() {
 						expect(id).toBe(101);
 						expect(cachedRange.maxRange).toBe(200);
 						expect(cachedRange.currentId).toBe(101);
+						expect(generator.getCurrentMax).toHaveBeenCalled();
+						expect(generator.setCurrentMax).toHaveBeenCalled();
 						done();
 					});
 				});
@@ -170,22 +177,22 @@ describe('HiLoGenerator', function() {
 
 			it('should return next id from range.', function(done) {
 				var generator = new HiLoIdGenerator( {server: 'http://localhost:81' });
-				generator.cache['/Raven/HiLo'] = { maxRange: 100, currentId: 1};
+				generator.cache['/docs/Raven/HiLo'] = { maxRange: 100, currentId: 1};
 				generator.nextId(function(error, id) {
 					expect(error).not.toBeDefined();
 					expect(id).toBe(2);
-					expect(generator.cache['/Raven/HiLo'].currentId).toBe(2);
+					expect(generator.cache['/docs/Raven/HiLo'].currentId).toBe(2);
 					done();
 				});
 			});
 
 			it('subsequent calls should increment id', function(done) {
 				var generator = new HiLoIdGenerator( {server: 'http://localhost:81' });
-				generator.cache['/Raven/HiLo'] = {maxRange: 100, currentId: 1};
+				generator.cache['/docs/Raven/HiLo'] = {maxRange: 100, currentId: 1};
 				generator.nextId(function(error, id) {
 					generator.nextId(function(error, id) {
 						expect(id).toBe(3);
-						expect(generator.cache['/Raven/HiLo'].currentId).toBe(3);
+						expect(generator.cache['/docs/Raven/HiLo'].currentId).toBe(3);
 						done();
 					});
 				});
