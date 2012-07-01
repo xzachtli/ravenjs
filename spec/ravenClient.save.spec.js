@@ -15,19 +15,19 @@ describe('RavenClient.save', function() {
 		});
 	});
 
-	xit('should throw when doc to save is null', function() {
+	it('should throw when doc to save is null', function() {
 		expect(function() { client.save(); }).toThrow();
 	});
 
-	xit('should throw when callback is null', function() {
+	it('should throw when callback is null', function() {
 		expect(function() { client.save( { } ); }).toThrow();
 	});
 
-	xit('should throw if specified id has invalid paths', function() {
+	it('should throw if specified id has invalid paths', function() {
 		expect(function() { client.save( '/foo/bar', { }, function(){ }); }).toThrow();
 	});
 
-	xit('should save new document with provided id', function(done) {
+	it('should save new document with provided id', function(done) {
 		var doc = { foo: 'bar' };
 
 		var ravendb = nock('http://localhost:80')
@@ -44,7 +44,7 @@ describe('RavenClient.save', function() {
 		});
 	});
  
-	xit('should save new document to collection with provided id', function(done) {
+	it('should save new document to collection with provided id', function(done) {
 		var doc = { bar: 'baz' };
 
 		var ravendb = nock('http://localhost:80')
@@ -62,7 +62,7 @@ describe('RavenClient.save', function() {
 		});
 	});
 
-	xit('should save new document with default id property', function(done) {
+	it('should save new document with default id property', function(done) {
 		var doc = { id: 'bar', baz: 'foobar' };
 		var ravendb = nock('http://localhost:80')
 			.put('/docs/bar', doc)
@@ -77,7 +77,7 @@ describe('RavenClient.save', function() {
 		});
 	});
 
-	xit('should save new document with generated id', function(done) {
+	it('should save new document with generated id', function(done) {
 		var doc = { baz: 'foobar' };
 
 		var ravendb = nock('http://localhost:80')
@@ -98,7 +98,7 @@ describe('RavenClient.save', function() {
 		});
 	});
 
-	xit('should update document with assigned id', function(done) {
+	it('should update document with assigned id', function(done) {
 		var ravendb = nock('http://localhost:80')
 			.put('/docs/foo/bar', { baz: 'foobar' })
 			.matchHeader('Raven-Entity-Name', 'foo')
@@ -135,8 +135,10 @@ describe('RavenClient.save', function() {
 		doc['@metadata']['Raven-Clr-Type'] = 'Foo.Bar';
 		doc['@metadata'].ETag = '0001-00001';
 
-		client = raven.connect({
+		client = new RavenClient({
 			server: 'http://localhost:80',
+			idFinder: raven.defaultIdFinder,
+			idGenerator: raven.defaultIdGenerator,
 			useOptimisticConcurrency: true
 		});
 

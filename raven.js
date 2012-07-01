@@ -13,7 +13,6 @@ var settings = {
 
 function defaultIdFinder(doc) {
 	if (!doc) return undefined;
-	console.log('default id finder called');
 	if (doc['@id']) return doc['@id'];
 	if (doc.hasOwnProperty('id')) return doc.id;
 	if (doc.hasOwnProperty('Id')) return doc.Id;

@@ -52,6 +52,66 @@ describe('HiLoGenerator', function() {
 			});
 		});
 
+		describe('when hilo range is not cached', function() {
+			var generator;
+			beforeEach(function() {
+				generator = new HiLoIdGenerator({ server: 'http://localhost:81' });
+				generator.cache['/docs/Raven/HiLo'] = undefined;
+			});
+
+			describe('and range does not exist on server.', function() {
+				it('should create a new range', function(done) {
+				
+					spyOn(HiLoIdGenerator.prototype, 'getCurrentMax')
+						.andCallFake(function(settings, path, callback) {
+							callback(undefined, undefined);
+						});
+
+					spyOn(HiLoIdGenerator.prototype, 'setCurrentMax')
+						.andCallFake(function(settings, path, max, callback) {
+							callback(undefined);
+						});
+
+					generator.nextId(function(error, id){
+						expect(id).toBe(1);
+						expect(generator.cache['/docs/Raven/HiLo'].maxRange).toBe(100);
+						expect(generator.cache['/docs/Raven/HiLo'].currentId).toBe(1);
+						expect(generator.getCurrentMax).toHaveBeenCalled();
+						expect(generator.setCurrentMax).toHaveBeenCalled();
+						done();
+					});
+				});
+			});
+
+			describe('and range exists on server.', function() {
+				it('should increment range on server', function(done) {
+
+					var currentMax = { currentMax: 100 };
+
+					spyOn(HiLoIdGenerator.prototype, 'getCurrentMax')
+						.andCallFake(function(settings, path, callback) {
+							callback(undefined, currentMax);
+						});
+
+					spyOn(HiLoIdGenerator.prototype, 'updateCurrentMax')
+						.andCallFake(function(settings, path, max, callback) {
+							callback(undefined);
+						});
+
+					generator.nextId(function(error, id) {
+						expect(error).not.toBeDefined();
+						expect(id).toBe(101);
+						expect(currentMax.currentMax).toBe(200);
+						expect(generator.cache['/docs/Raven/HiLo'].currentId).toBe(101);
+						expect(generator.cache['/docs/Raven/HiLo'].maxRange).toBe(200);
+						expect(generator.getCurrentMax).toHaveBeenCalled();
+						expect(generator.updateCurrentMax).toHaveBeenCalled();
+						done();
+					});
+				});
+			});
+		});
+
 		describe('when next id exceeds current max range', function() {
 
 			var generator;
@@ -69,6 +129,7 @@ describe('HiLoGenerator', function() {
 				generator.nextId(function(error, id) {
 					expect(error).toBeDefined();
 					expect(id).not.toBeDefined();
+					expect(generator.getCurrentMax).toHaveBeenCalled();
 					done();
 				});
 			});
