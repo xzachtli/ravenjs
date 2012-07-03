@@ -1,39 +1,56 @@
-var request = require('../lib/ravenRequest'),
+var RavenRequest = require('../lib/RavenRequest'),
 	nock = require('nock');
 
-describe('ravenRequest', function() {
+describe('RavenRequest.ctor', function() {
 
 	it('should throw when settings is null', function() {
-		expect(function() { request(null, null, null); } ).toThrow();
+		expect(function() { new RavenRequest() } ).toThrow();
 	});
 
-	it('shoulw throw when settings is undefined', function(){
-		expect(function() { request(undefined, null, null); }).toThrow();
+	it('should throw when settings is undefined', function() {
+		expect(function() { new RavenRequest(undefined); }).toThrow();
+	});
+});
+
+describe('RavenRequest.buildUrl', function() {
+	var request;
+
+	beforeEach(function() {
+		request = new RavenRequest ({ host: 'http://localhost:81'});
+	})
+
+	it ('should return full url', function() {
+		expect(request.buildUrl('foo')).toBe('http://localhost:81/foo');
 	});
 
-	it ('should throw when requestData is null', function(){
-		expect(function() { request({ }, null, { }); }).toThrow();
+	it('should return database qualified url', function() {
+		request.settings.database = 'bar';
+		expect(request.buildUrl('foo')).toBe('http://localhost:81/databases/bar/foo');
 	});
 
-	it('should throw when requestData is undefined', function() {
-		expect(function() { request({ }, undefined, { }); }).toThrow();
+	it('should handle paths with //', function() {
+		expect(request.buildUrl('/foo/bar')).toBe('http://localhost:81/foo/bar');
+	});
+});
+
+describe('RavenRequest.sendRequest', function() {
+	var request;
+
+	beforeEach(function() {
+		request = new RavenRequest( {server: 'http://localhost:81' });
 	});
 
-	it('should throw when callback is null', function() {
-		expect(function() { request({ }, { }, null); }).toThrow();
+	it ('should throw when requestData is null', function() {
+		expect(function () { request.sendRequest(); }).toThrow();
 	});
 
-	it('should throw when callback is undefined', function() {
-		expect(function() { request({ }, { }, undefined); }).toThrow();
-	});
-
-	it ('should authenticate with existing token', function(done) {
+	it ('should send request', function(done) {
+		var data = { url: 'http://localhost:81/foo', method: 'GET' };
 		var ravendb = nock('http://localhost:81')
-			.matchHeader('Authorization', 'auth')
 			.get('/foo')
-			.reply(200, {success: 'true'});
+			.reply(200, {sucess: 'true'});
 
-		request({ authToken: 'auth'}, { url: 'http://localhost:81/foo'}, function(error, response, body) {
+		request.sendRequest(data, function(error, response, data) {
 			expect(error).toBeNull();
 			ravendb.done();
 			done();
@@ -41,26 +58,91 @@ describe('ravenRequest', function() {
 	});
 
 	it('should send request with data', function(done) {
+		var data = { foo : 'bar' };
+		var requestData = { 
+			url: 'http://localhost:81/foo',
+			method: 'POST',
+			json: data
+		};
+
 		var ravendb = nock('http://localhost:81')
+			.post('/foo', data)
 			.matchHeader('content-type', 'application/json; charset=UTF-8')
 			.matchHeader('accept', 'application/json')
-			.get('/foo', {foo: 'bar'})
 			.reply(200, {success: 'true'});
 
-		request({ }, {url: 'http://localhost:81/foo', json: {foo: 'bar'}}, function(error, response, body) {
+		request.sendRequest(requestData, function(error, response, data) {
 			expect(error).toBeNull();
 			ravendb.done();
 			done();
 		});
 	});
 
-	it('should authenticate using username pssword and set auth token', function(done) {
-			
-		var authrequest_headers = { };
-		authrequest_headers['www-authenticate'] = true;
-		authrequest_headers['oauth-source'] = 'http://localhost:81/auth';
+	it('should send request with credentials', function(done) {
+		var requestData = { 
+			url: 'http://localhost:81/foo',
+			method: 'GET'
+		};
 
-		var authToken = 'Basic ' + new Buffer('foo:bar', 'ascii').toString('base64');
+		request.settings.authToken = 'token';
+		var ravendb = nock('http://localhost:81')
+			.get('/foo')
+			.matchHeader('Authorization', 'token')
+			.reply(200, {success: 'true'});
+
+		request.sendRequest(requestData, function(error, response, data) {
+			expect(error).toBeNull();
+			ravendb.done();
+			done();
+		});
+	});
+
+	it ('should authenticate request', function(done) {
+		var requestData = {
+			url: 'http://localhost:81/foo',
+			method: 'GET'
+		};
+
+		var ravendb = nock('http://localhost:81')
+			.get('/foo')
+			.reply(401);
+
+		spyOn(RavenRequest.prototype, 'authenticate')			
+			.andCallFake(function(response, requestData, callback) {
+				callback(null, response, {success: 'true'});
+			});
+
+		request.sendRequest(requestData, function(error, response, data) {
+			expect(error).toBeNull();
+			expect(data).toBeDefined();
+			expect(request.authenticate).toHaveBeenCalled();
+			ravendb.done();
+			done();
+		});
+	});
+});
+
+describe('RavenRequest.authenticate', function() {
+	var request;
+
+	beforeEach(function() {
+		request = new RavenRequest({host: 'http://localhost:81'});
+	});
+
+	it('should return error when auth headers are missing', function(done) {
+		var response = { headers: { }};
+		request.authenticate(response, { }, function(error, response, body) {
+			expect(error).toBeDefined();
+			done();
+		});
+	});
+
+	it ('should authenticate using username and password', function(done) {
+		var authrequest_headers = { };
+ 		authrequest_headers['www-authenticate'] = true;
+ 		authrequest_headers['oauth-source'] = 'http://localhost:81/auth';
+
+ 		var authToken = 'Basic ' + new Buffer('foo:bar', 'ascii').toString('base64');
 
 		var ravendb = nock('http://localhost:81')
 			.get('/foo')
@@ -74,47 +156,45 @@ describe('ravenRequest', function() {
 			.matchHeader('Authorization', 'Bearer token')
 			.reply(200, {success: true});
 
-		var settings = { username: 'foo', password: 'bar' };
-		request(settings, {url: 'http://localhost:81/foo'}, function(error, response, body) {
-			expect(settings.authToken).toBe('Bearer token');
+		request.settings.username = 'foo';
+		request.settings.password = 'bar';
+		request.sendRequest ({ url: 'http://localhost:81/foo' }, function(error, response, body) {
+			expect(request.settings.authToken).toBe('Bearer token');
 			expect(error).toBeNull();
 			ravendb.done();
 			done();
 		});
-		
 	});
 
-	it('should authenticate using apiKey and set auth token', function(done) {
-
+	it('should authenticaten using api key', function(done) {
 		var authrequest_headers = { };
 		authrequest_headers['www-authenticate'] = true;
 		authrequest_headers['oauth-source'] = 'http://localhost:81/auth';
-
-		var apiKey = 'apikey123';
-
+		
+		request.settings.apiKey = 'apiKey123';
+		
 		var ravendb = nock('http://localhost:81')
 			.get('/foo')
 			.reply(401, '', authrequest_headers)
 			.get('/auth')
 			.matchHeader('grant_type', 'client_credentials')
 			.matchHeader('accept', 'application/json; charset=UTF-8')
-			.matchHeader('Api-Key', apiKey)
+			.matchHeader('Api-Key', 'apiKey123')
 			.reply(200, 'token')
 			.get('/foo')
 			.matchHeader('Authorization', 'Bearer token')
 			.reply(200, {success: true});
 
-		var settings = { apiKey: apiKey };
-		request(settings, {url: 'http://localhost:81/foo'}, function(error, response, body) {
-			expect(settings.authToken).toBe('Bearer token');
+		
+		request.sendRequest({url: 'http://localhost:81/foo'}, function(error, response, body) {
+			expect(request.settings.authToken).toBe('Bearer token');
 			expect(error).toBeNull();
 			ravendb.done();
 			done();
 		});
 	});
 
-	it('should return error when authentication is failed', function(done) {
-
+	it('should return error when authentication fails', function(done) {
 		var authrequest_headers = { };
 		authrequest_headers['www-authenticate'] = true;
 		authrequest_headers['oauth-source'] = 'http://localhost:81/auth';
@@ -125,24 +205,12 @@ describe('ravenRequest', function() {
 			.get('/auth')
 			.reply(403);
 
-		request({ username: 'foo', password: 'bar'}, {url: 'http://localhost:81/foo'}, function(error, response, body) {
+		request.settings.username = 'foo';
+		request.settings.password = 'bar';
+		request.sendRequest({url: 'http://localhost:81/foo'}, function(error, response, body) {
 			expect(error).not.toBeNull();
 			ravendb.done();
 			done();
 		});
 	});
-
-	it('should return successful response', function(done) {
-		var ravendb = nock('http://localhost:81')
-			.get('/foo')
-			.reply(200, {success: 'true'});
-
-		request({ } , { url: 'http://localhost:81/foo'}, function(error, response, body) {
-			expect(error).toBeNull();
-			expect(response).not.toBeNull();
-			expect(body).toBeDefined();
-			ravendb.done();
-			done();
-		});
-	});	
 });

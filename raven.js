@@ -1,11 +1,10 @@
-var qs = require('querystring'),
-	_ = require('underscore'),
-	RavenClient = require('./lib/ravenClient'),
-	HiLoIdGenerator = require('./lib/hiloIdGenerator');
+var querystring = require('querystring'),
+	RavenClient = require('./lib/RavenClient'),
+	HiLoIdGenerator = require('./lib/HiLoIdGenerator');
 
 
 var settings = {
-		server: 'http://localhost:80',
+		host: 'http://localhost:80',
 		idFinder: defaultIdFinder,
 		idGenerator: defaultIdGenerator,
 		useOptimisticConcurrency: false
@@ -21,7 +20,7 @@ function defaultIdFinder(doc) {
 function defaultIdGenerator(settings, callback) {
 	
 	if (!settings) throw Error('Expected a valid setings object.');
-	if (!settings.server) throw Error('Invalid settings. Expected server property.');
+	if (!settings.host) throw Error('Invalid settings. Expected host property.');
 	if (!callback || !_(callback).isFunction) throw Error('Exepected a valid callback function.');
 
 	var generator = new HiLoIdGenerator(settings);
@@ -33,24 +32,24 @@ function defaultIdGenerator(settings, callback) {
 
 exports.connectionString = function(connStr) {
 	var self = this;
-	if (!arguments.length) return settings.server;
+	if (!arguments.length) return settings.host;
 	if (!_.isString(connStr)) throw new Error('Expected a valid raven connection string');
 
-	var values = qs.parse(connStr, ';', '=');
+	var values = querystring.parse(connStr, ';', '=');
 	if (!values.Url) throw new Error('Required connection string property "Url" was not specified!');
 
-	self.server(values.Url);
+	self.host(values.Url);
 	self.database(values.Database);
 	self.username(values.UserName);
 	self.password(values.Password);
 	self.apiKey(values.ApiKey);
 };
  
-exports.server = function(server) {
-	if (!arguments.length) return settings.server;
-	if (!_.isString(server)) throw new Error('Expected a valid raven server name');
-	if (!~server.indexOf('http://') && !~server.indexOf('https://')) throw new Error('Expected a server address with http:// or https://');
-	settings.server = server;
+exports.host = function(host) {
+	if (!arguments.length) return settings.host;
+	if (!_.isString(host)) throw new Error('Expected a valid raven host name');
+	if (!~host.indexOf('http://') && !~host.indexOf('https://')) throw new Error('Expected a host address with http:// or https://');
+	settings.host = host;
 };
 
 exports.database = function(database) {
@@ -117,7 +116,7 @@ exports.useOptimisticConcurrency= function(val) {
 
 exports.proxy = function(val) {
 	if(!val) return settings.proxy;
-	if (!_.isString(val)) throw new Error('Expected a valid proxy server address.');
+	if (!_.isString(val)) throw new Error('Expected a valid proxy host address.');
 	if (!~val.indexOf('http://') && !~val.indexOf('https://')) throw new Error("Invaid proxy address scheme. Expected http or https scheme.");
 	settings.proxy = val;
 };
@@ -140,7 +139,7 @@ exports.defaultIdGenerator = defaultIdGenerator;
 exports.connect = function(options) {
 	if (!arguments.length) return new RavenClient(settings);
 	return new RavenClient({
-		server: options.server || settings.server,
+		host: options.host || settings.host,
 		database: options.database || settings.database,
 		username: options.username || settings.username,
 		password: options.password || settings.password,
