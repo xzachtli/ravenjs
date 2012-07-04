@@ -1,13 +1,14 @@
 var querystring = require('querystring'),
 	RavenClient = require('./lib/RavenClient'),
-	HiLoIdGenerator = require('./lib/HiLoIdGenerator');
+	HiLoIdGenerator = require('./lib/HiLoIdGenerator'),
+	utils = require('./utils');
 
 
 var settings = {
-		host: 'http://localhost:80',
-		idFinder: defaultIdFinder,
-		idGenerator: defaultIdGenerator,
-		useOptimisticConcurrency: false
+	host: 'http://localhost:80',
+	idFinder: defaultIdFinder,
+	idGenerator: defaultIdGenerator,
+	useOptimisticConcurrency: false
 };
 
 function defaultIdFinder(doc) {
@@ -137,15 +138,17 @@ exports.defaultIdFinder = defaultIdFinder;
 exports.defaultIdGenerator = defaultIdGenerator;
 
 exports.connect = function(options) {
-	if (!arguments.length) return new RavenClient(settings);
-	return new RavenClient({
-		host: options.host || settings.host,
-		database: options.database || settings.database,
-		username: options.username || settings.username,
-		password: options.password || settings.password,
-		apiKey: options.apiKey || settings.apiKey,
-		idFinder: options.idFinder || settings.idFinder,
-		idGenerator: options.idGenerator || settings.idGenerator,
-		useOptimisticConcurrency: options.useOptimisticConcurrency || settings.useOptimisticConcurrency
-	});
+	var clientSettings = utils.clone(settings);
+	if (utils.isObject(options)) {
+		clientSettings.host = options.host || clientSettings.host;
+		clientSettings.database = options.database || clientSettings.database;
+		clientSettings.username = options.username || clientSettings.username;
+		clientSettings.password = options.password || clientSettings.password;
+		clientSettings.apiKey = options.apiKey || clientSettings.apiKey;
+		clientSettings.idFinder = options.idFinder || clientSettings.idFinder;
+		clientSettings.idGenerator = options.idGenerator || clientSettings.idGenerator;
+		clientSettings.useOptimisticConcurrency = options.useOptimisticConcurrency || clientSettings.useOptimisticConcurrency;
+	}
+	
+	return new RavenClient(clientSettings);
 };
