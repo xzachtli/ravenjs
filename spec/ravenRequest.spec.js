@@ -12,27 +12,6 @@ describe('RavenRequest.ctor', function() {
 	});
 });
 
-describe('RavenRequest.buildUrl', function() {
-	var request;
-
-	beforeEach(function() {
-		request = new RavenRequest ({ host: 'http://localhost:81'});
-	})
-
-	it ('should return full url', function() {
-		expect(request.buildUrl('foo')).toBe('http://localhost:81/foo');
-	});
-
-	it('should return database qualified url', function() {
-		request.settings.database = 'bar';
-		expect(request.buildUrl('foo')).toBe('http://localhost:81/databases/bar/foo');
-	});
-
-	it('should handle paths with //', function() {
-		expect(request.buildUrl('/foo/bar')).toBe('http://localhost:81/foo/bar');
-	});
-});
-
 describe('RavenRequest.sendRequest', function() {
 	var request;
 
