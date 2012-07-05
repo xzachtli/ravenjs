@@ -10,7 +10,8 @@
 	"private": true,	
 	"dependencies": {
 		"request": ">= 1.0.0",	
-		"nock": ">= 0.13.3"
+		"nock": ">= 0.13.3",
+		"underscore": ">= 1.0.0"
 	},
 	"devDependencies": {
 		"nock": ">= 0.0.1"

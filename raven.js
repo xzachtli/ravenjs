@@ -1,8 +1,7 @@
 var querystring = require('querystring'),
 	RavenClient = require('./lib/RavenClient'),
 	HiLoIdGenerator = require('./lib/HiLoIdGenerator'),
-	utils = require('./utils');
-
+	_ = require('underscore');
 
 var settings = {
 	host: 'http://localhost:80',
@@ -13,7 +12,7 @@ var settings = {
 
 function defaultIdFinder(doc) {
 	if (!doc) return undefined;
-	if (doc['@id']) return doc['@id'];
+	if (doc['@metadata'] && doc['@metadata']['@id']) return doc['@metadata']['@id'];
 	if (doc.hasOwnProperty('id')) return doc.id;
 	if (doc.hasOwnProperty('Id')) return doc.Id;
 }
@@ -138,8 +137,8 @@ exports.defaultIdFinder = defaultIdFinder;
 exports.defaultIdGenerator = defaultIdGenerator;
 
 exports.connect = function(options) {
-	var clientSettings = utils.clone(settings);
-	if (utils.isObject(options)) {
+	var clientSettings = _(settings).clone();
+	if (_(options).isObject()) {
 		clientSettings.host = options.host || clientSettings.host;
 		clientSettings.database = options.database || clientSettings.database;
 		clientSettings.username = options.username || clientSettings.username;
