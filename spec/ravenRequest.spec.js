@@ -248,12 +248,12 @@ describe('RavenRequest', function() {
 		it('should parse response data', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.get('/foo')
-				.reply(200, {foo: 'bar'});
+				.reply(200, {foo: 'bar'}, { 'content-type': 'application/json; charset=utf-8' });
 
 			request.sendGet('foo', function(error, response, data) {
 				expect(error).not.toBeDefined();
 				expect(response).toBeDefined();
-				expect(data).toBeDefined();
+				expect(data.foo).toBeDefined();
 				ravendb.done();
 				done();
 			});
@@ -281,6 +281,15 @@ describe('RavenRequest', function() {
 			expect(function() { request.sendPost({ path: 'foo' }); }).toThrow();
 			expect(function() { request.sendPost({ path: 'foo' }, null); }).toThrow();
 			expect(function() { request.sendPost({ path: 'foo' }, undefined); }).toThrow();
+		});
+
+		it('should throw error when both json and stream data is provided', function() {
+			expect(function() {
+				request.sendPost({
+					path: 'foo',
+					buffer: { }
+				});
+			}).toThrow();
 		});
 		
 		it('should send request to default database when database is not specified', function(done) {
@@ -389,6 +398,15 @@ describe('RavenRequest', function() {
 				ravendb.done();
 				done();
 			});
+		});
+
+		it('should throw error when both json and stream data is provided', function() {
+			expect(function() {
+				request.sendPost({
+					path: 'foo',
+					buffer: { }
+				});
+			}).toThrow();
 		});
 
 		it('should send request to specified database', function(done) {

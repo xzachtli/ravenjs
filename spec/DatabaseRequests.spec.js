@@ -66,7 +66,7 @@ describe('DatabaseRequests', function() {
 
 			var ravendb = nock('http://localhost:81')
 				.get('/databases')
-				.reply(200, data);
+				.reply(200, data, { 'content-type': 'application/json; charset=utf-8' });
 
 			request.list(function(error, results) {
 				expect(error).not.toBeDefined();
