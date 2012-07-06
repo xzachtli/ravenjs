@@ -26,7 +26,7 @@ describe('DocumentRequests', function() {
 		it('should get document from server.', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.get('/docs/foo')
-				.reply(200, { foo: 'bar'});
+				.reply(200, { foo: 'bar'}, { 'content-type': 'application/json; charset=utf-8' });
 
 			request.get('foo', function(error, data) {
 				expect(error).not.toBeDefined();
@@ -68,7 +68,8 @@ describe('DocumentRequests', function() {
 			var headers = {
 				etag: '0000-000-001',
 				'raven-entity-name': 'foos',
-				'raven-clr-type': 'foos.bar'
+				'raven-clr-type': 'foos.bar',
+				'content-type': 'application/json; charset=utf-8'
 			};
 
 			var ravendb = nock('http://localhost:81')

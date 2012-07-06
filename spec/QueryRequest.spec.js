@@ -191,7 +191,7 @@ describe('QueryRequest', function() {
 		it ('should request specified index results', function(done){
 			var ravendb = nock('http://localhost:81')
 				.get('/indexes/foo')
-				.reply(200, responseData);
+				.reply(200, responseData, { 'content-type': 'application/json; charset=utf-8' });
 
 			request.results(function(error, data) {
 				expect(error).not.toBeDefined();
@@ -205,7 +205,7 @@ describe('QueryRequest', function() {
 		it('should return error with data.', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.get('/indexes/foo?query=foo%3Abar')
-				.reply(500, { error: 'Some error' });
+				.reply(500, { error: 'Some error' }, { 'content-type': 'application/json; charset=utf-8' });
 
 			request.where('foo', 'bar').results(function(error, data) {
 				expect(error).toBeDefined();

@@ -137,6 +137,7 @@ exports.defaultIdFinder = defaultIdFinder;
 exports.defaultIdGenerator = defaultIdGenerator;
 
 exports.connect = function(options) {
+	var self = this;
 	var clientSettings = _(settings).clone();
 	if (_(options).isObject()) {
 		clientSettings.host = options.host || clientSettings.host;
