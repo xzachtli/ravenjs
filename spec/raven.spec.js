@@ -318,4 +318,23 @@ describe('raven', function() {
 			expect(client.settings.idGenerator).toBe(generator);
 		});
 	});
+
+	describe('.create', function() {
+		it('should return a new object when collection name is not specified.', function() {
+			var obj = raven.create();
+			expect(obj).toBeDefined();
+			expect(obj['@metadata']).not.toBeDefined();
+		});
+
+		it('should throw when collection name is not a string', function() {
+			expect(function() { raven.create(1); }).toThrow();
+			expect(function() { raven.create({ }); }).toThrow();
+		});
+
+		it('should create a object with specified raven entity name.', function() {
+			var obj = raven.create('foo');
+			expect(obj).toBeDefined();
+			expect(obj['@metadata']['Raven-Entity-Name']).toBe('foo');
+		});
+	});
 });

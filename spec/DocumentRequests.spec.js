@@ -240,7 +240,7 @@ describe('DocumentRequests', function() {
 		it('should delete document using id returned by id finder', function(done) {
 			request.settings.idFinder = function(doc) { return 'foo'; };
 			var ravendb = nock('http://localhost:81')
-				.delete('/foo')
+				.delete('/docs/foo')
 				.reply(204);
 
 			request.remove({ }, function(error) {

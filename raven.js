@@ -147,8 +147,15 @@ exports.connect = function(options) {
 		clientSettings.apiKey = options.apiKey || clientSettings.apiKey;
 		clientSettings.idFinder = options.idFinder || clientSettings.idFinder;
 		clientSettings.idGenerator = options.idGenerator || clientSettings.idGenerator;
+		clientSettings.proxy = options.proxy || clientSettings.proxy;
 		clientSettings.useOptimisticConcurrency = options.useOptimisticConcurrency || clientSettings.useOptimisticConcurrency;
 	}
 	
 	return new RavenClient(clientSettings);
+};
+
+exports.create = function(collectionName) {
+	if (arguments.length === 0) return { };
+	if (!_(collectionName).isString()) throw new Error('Expected a valid string for collectionName');
+	return { '@metadata': { 'Raven-Entity-Name': collectionName }};
 };
