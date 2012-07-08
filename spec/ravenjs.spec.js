@@ -1,4 +1,4 @@
-var raven = require('../raven'),
+var raven = require('../ravenjs'),
 	RavenClient = require('../lib/RavenClient'),
 	HiLoIdGenerator = require('../lib/HiLoIdGenerator');
 

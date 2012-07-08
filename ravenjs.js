@@ -18,7 +18,6 @@ function defaultIdFinder(doc) {
 }
 
 function defaultIdGenerator(settings, callback) {
-	
 	if (!settings) throw Error('Expected a valid setings object.');
 	if (!settings.host) throw Error('Invalid settings. Expected host property.');
 	if (!callback || !_(callback).isFunction) throw Error('Exepected a valid callback function.');
