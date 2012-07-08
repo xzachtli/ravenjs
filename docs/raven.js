@@ -238,7 +238,7 @@ client.query('Albums')
 
 //ravenjs also supports dynamic queries. Use the same `query()` method wrapper on the client without
 //an index name to indicate you want to issue a dynamic query. **NOTE** When issuing a dynamic query,
-//you must specify at issue specify at least one `where` filter or specify a collection to query using
+//you must specify at least one `where` filter or specify a collection to query using
 //the `collection()` method.
 
 //Issue a dynamic query on a collection
@@ -298,7 +298,7 @@ client.attachment('ING001.jpg', function(error) {
 //Utilities
 //=========
 
-//`raven.collection(collectionName)`
+//`raven.create(collectionName)`
 //----------------------------------
 
 //Creates a new object and assigns the Raven-Entity-Name metadata to the newly created
