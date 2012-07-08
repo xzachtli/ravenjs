@@ -1,5 +1,9 @@
-ravenjs - A RaveDB client node module.
+ravenjs - A RavenDB node module.
 =======
+
+License
+=======
+ravenjs is released under the [MIT License] (http://www.opensource.org/licenses/MIT)
 
 Installing
 ==========
