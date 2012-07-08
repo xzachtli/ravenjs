@@ -1,20 +1,24 @@
 {
 	"name": "ravenjs",	
-	"description": "A node module RavenDB client.",
+	"description": "A RavenDB client node module.",
 	"author": "Ritesh Rao <rao.ritesh@gmail.com>",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/riteshrao/ravenjs.git"
 	},
-	"version": "0.0.1",	
-	"private": true,	
+	"version": "1.0.0",		
 	"dependencies": {
 		"request": ">= 1.0.0",	
-		"nock": ">= 0.13.3",
 		"underscore": ">= 1.0.0"
 	},
 	"devDependencies": {
 		"nock": ">= 0.0.1"
 	},
-	"main": "./raven.js"
+	"keywords":[
+		"ravendb",
+		"raven",
+		"ravenjs"
+	],
+	"license": "MIT",
+	"main": "./ravenjs.js"
 }
