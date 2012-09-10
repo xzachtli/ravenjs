@@ -337,4 +337,13 @@ describe('raven', function() {
 			expect(obj['@metadata']['Raven-Entity-Name']).toBe('foo');
 		});
 	});
+
+	describe('.filter', function() {
+
+		it('should return the filter function', function() {
+
+			expect(raven.filter('foo').or(['bar', 'baz']))
+				.toBe('(foo:bar OR foo:baz)');
+		});
+	});
 });

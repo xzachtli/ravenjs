@@ -1,6 +1,7 @@
 var querystring = require('querystring'),
 	RavenClient = require('./lib/RavenClient'),
 	HiLoIdGenerator = require('./lib/HiLoIdGenerator'),
+	filter = require('./lib/filter');
 	_ = require('underscore');
 
 var settings = {
@@ -158,3 +159,5 @@ exports.create = function(collectionName) {
 	if (!_(collectionName).isString()) throw new Error('Expected a valid string for collectionName');
 	return { '@metadata': { 'Raven-Entity-Name': collectionName }};
 };
+
+exports.filter = filter;
