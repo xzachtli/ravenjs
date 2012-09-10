@@ -43,30 +43,12 @@ describe('QueryRequest', function() {
 		it('should throw when filter field name is not string', function() {
 			expect(function() { request.where({}, 'bar'); }).toThrow();
 		});
-
-		it('should throw when filter field value is undefined', function() {
-			expect(function() { request.where('foo'); }).toThrow();
-			expect(function() { request.where('foo', null); }).toThrow();
-			expect(function() { request.where('foo', undefined); }).toThrow();
-		});
-
-		it('should throw when filter field value is not a string.', function() {
-			expect(function() { request.where( 'foo', { });}).toThrow();
-		});
-
-		it('should assign where filter to query data', function() {
-			request.where('foo', 'bar');
+		
+		it('should apply query filter', function() {
+			request.where('Foo').is('Bar');
 			expect(request.queryData.where).toBeDefined();
-			expect(request.queryData.where.foo).toBeDefined();
-			expect(request.queryData.where.foo).toBe('bar');
-		});
-
-		it('should assign multiple where filtes to query data', function() {
-			request.where('foo', 'bar')
-				.where('baz', 'foo');
-
-			expect(request.queryData.where.foo).toBeDefined();
-			expect(request.queryData.where.baz).toBeDefined();
+			expect(request.queryData.where.length).toBe(1);
+			expect(request.queryData.where[0]).toBe('Foo:Bar');
 		});
 	});
 
@@ -81,26 +63,19 @@ describe('QueryRequest', function() {
 			expect(function() { request.and({}, 'bar'); }).toThrow();
 		});
 
-		it('should throw when filter field value is undefined', function() {
-			expect(function() { request.and('foo'); }).toThrow();
-			expect(function() { request.and('foo', null); }).toThrow();
-			expect(function() { request.and('foo', undefined); }).toThrow();
-		});
-
-		it('should throw when filter field value is not a string.', function() {
-			expect(function() { request.and( 'foo', { });}).toThrow();
-		});
-
 		it('should throw when and() is called before where().', function() {
 			expect(function() { request.and('foo', 'bar'); }).toThrow();
 		});
 
 		it('should assign where filter to query data', function() {
-			request.where('foo', 'bar')
-					.and('bar', 'baz');
+			request
+				.where('foo').is('bar')
+				.and('bar').is('baz');
+
 			expect(request.queryData.where).toBeDefined();
-			expect(request.queryData.where.foo).toBeDefined();
-			expect(request.queryData.where.bar).toBeDefined();
+			expect(request.queryData.where.length).toBe(2);
+			expect(request.queryData.where[0]).toBe('foo:bar');
+			expect(request.queryData.where[1]).toBe('bar:baz');
 		});
 	});
 
@@ -207,13 +182,15 @@ describe('QueryRequest', function() {
 				.get('/indexes/foo?query=foo%3Abar')
 				.reply(500, { error: 'Some error' }, { 'content-type': 'application/json; charset=utf-8' });
 
-			request.where('foo', 'bar').results(function(error, data) {
-				expect(error).toBeDefined();
-				expect(data).toBeDefined();
-				expect(data.error).toBe('Some error');
-				ravendb.done();
-				done();
-			});
+			request
+				.where('foo').is('bar')
+				.results(function(error, data) {
+					expect(error).toBeDefined();
+					expect(data).toBeDefined();
+					expect(data.error).toBe('Some error');
+					ravendb.done();
+					done();
+				});
 		});
 
 		it('should request index with where filter', function(done) {
@@ -222,7 +199,7 @@ describe('QueryRequest', function() {
 				.reply(200, responseData);
 
 			request
-				.where('Baz', 'Boo')
+				.where('Baz').is('Boo')
 				.results(function(error, data) {
 					expect(error).not.toBeDefined();
 					expect(data).toBeDefined();
@@ -258,12 +235,14 @@ describe('QueryRequest', function() {
 				.get('/indexes/dynamic?query=foo%3Abar')
 				.reply(200, responseData);
 
-			request.where('foo', 'bar').results(function(error, data) {
-				expect(error).not.toBeDefined();
-				expect(data).toBeDefined();
-				ravendb.done();
-				done();
-			});
+			request
+				.where('foo').is('bar')
+				.results(function(error, data) {
+					expect(error).not.toBeDefined();
+					expect(data).toBeDefined();
+					ravendb.done();
+					done();
+				});
 		});
 
 		it('should request query with multiple where filters', function(done) {
@@ -271,8 +250,9 @@ describe('QueryRequest', function() {
 				.get('/indexes/foo?query=Baz%3ABoo%20AND%20Bar%3ABaz')
 				.reply(200, responseData);
 
-			request.where('Baz', 'Boo')
-				.and('Bar', 'Baz')
+			request
+				.where('Baz').is('Boo')
+				.and('Bar').is('Baz')
 				.results(function(error, data) {
 					expect(error).not.toBeDefined();
 					expect(data).toBeDefined();
@@ -353,8 +333,8 @@ describe('QueryRequest', function() {
 				.reply(200, responseData);
 			
 			request
-				.where('foo', 'bar')
-				.and('bar', 'baz')
+				.where('foo').is('bar')
+				.and('bar').is('baz')
 				.select('foo')
 				.orderBy('bar')
 				.skip(10)

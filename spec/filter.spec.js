@@ -3,73 +3,99 @@ var filter = require('../lib/filter.js');
 describe('filter', function() {
 
 	describe('.ctor', function() {
-		
-		it('should throw when field is undefined', function() {
-			expect(function() { filter(undefined); }).toThrow();
-			expect(function() { filter(null); }).toThrow();
+
+		it ('should throw when the that argument is undefined', function() {
+			expect(function() {
+				filter(null, 'Foo', function() { });
+			}).toThrow();
+
+			expect(function() {
+				filter(undefined, 'Foo', function() { });
+			}).toThrow();
 		});
 
-		it('should throw when field is not a string', function() {
-			expect(function() { filter({}); }).toThrow();
-		});
-	});
+		it('should throw when the field argument is undefined', function() {
+			expect(function() {
+				filter({ }, undefined, function() { });
+			}).toThrow();
 
-	describe('value', function() {
+			expect(function() {
+				filter({ }, null, function() { });
+			}).toThrow();
 
-		it('should throw when value is undefined', function() {
-			expect(function() { filter('foo').value(undefined); }).toThrow();
-			expect(function() { filter('foo').value(null); }).toThrow();
-		});
-
-		it('should return a valid value filter', function() {
-			expect(filter('foo').value('bar')).toBe('foo:bar');
-		});
-	});
-
-	describe('or', function() {
-
-		it('should throw when values is undefined', function() {
-
-			expect(function() { filter('foo').or(undefined); }).toThrow();
-			expect(function() { filter('foo').or(null); }).toThrow();
+			expect(function() {
+				filter({ }, '', function() { });
+			}).toThrow();
 		});
 
-		it('should throw when values is not an array', function() {
-			expect(function() { filter('foo').or('bar'); }).toThrow();
-		});
+		it ('should throw when the callback argument is undefined', function() {
+			expect(function() {
+				filter({ }, 'Foo', undefined);
+			}).toThrow();
 
-		it('should return valid or filter with a single value', function() {
-			expect(filter('foo').or(['bar']))
-				.toBe('(foo:bar)');
-		});
-
-		it('should return valid or filter with multiple values', function() {
-			expect(filter('foo').or(['bar', 'baz']))
-				.toBe("(foo:bar OR foo:baz)");
+			expect(function() {
+				filter({ }, 'Foo', null);
+			}).toThrow();
 		});
 	});
 
-	describe('and', function() {
+	describe('when filtering', function() {
+		var returnObj = { },
+			filterValue = '',
+			cb = function(val) {
+				filterValue = val;
+			};
 
-		it('should throw when values is undefined', function() {
+		var f = filter(returnObj, 'Foo', cb);
 
-			expect(function() { filter('foo').and(undefined); }).toThrow();
-			expect(function() { filter('foo').and(null); }).toThrow();
+		describe('.is', function() {
+
+			it('should throw when the value is undefined', function() {
+				expect(function() { f.is(null); }).toThrow();
+				expect(function() { f.is(undefined); }).toThrow();
+			});
+
+			it('should return the passed in return object', function() {
+				expect(f.is('Bar')).toBe(returnObj);
+			});
+
+			it('should invoke the callback with query filter value', function() {
+				f.is('Bar');
+				expect(filterValue).toBe('Foo:Bar');
+			});
+
+			it('should invoke the callback with query filter with AND operator', function() {
+				f.is(['Bar', 'Baz']);
+				expect(filterValue).toBe('(Foo:Bar AND Foo:Baz)');
+			});
+
 		});
 
-		it('should throw when values is not an array.', function() {
+		describe('.isEither', function() {
+			it ('should throw when the value is undefined', function() {
+				expect(function() { f.isEither(null); }).toThrow();
+				expect(function() { f.isEither(undefined); }).toThrow();
+			});
 
-			expect(function() { filter('foo').and({}); }).toThrow();
+			it ('should throw when value is not an array', function() {
+				expect(function() { f.isEither('Foo'); }).toThrow();
+				expect(function() { f.isEither({}); }).toThrow();
+			});
+
+			it('should return the passed in return object', function() {
+				expect(f.isEither(['Bar', 'Baz'])).toBe(returnObj);
+			});
+
+			it('should invoke the callback with OR query filter value', function() {
+				f.isEither(['Bar', 'Baz']);
+				expect(filterValue).toBe('(Foo:Bar OR Foo:Baz)');
+			});
+
+			it('should invoke the callback with a single query filter', function() {
+				f.isEither(['Bar']);
+				expect(filterValue).toBe('Foo:Bar');
+			});
 		});
 
-		it('should return valid and filter with a single value.', function() {
-			expect(filter('foo').and(['bar']))
-				.toBe('(foo:bar)');
-		});
-
-		it('should return valid and filter with multiple values', function() {
-			expect(filter('foo').and(['bar', 'baz']))
-				.toBe('(foo:bar AND foo:baz)');
-		});
 	});
 });

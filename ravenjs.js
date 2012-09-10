@@ -159,5 +159,3 @@ exports.create = function(collectionName) {
 	if (!_(collectionName).isString()) throw new Error('Expected a valid string for collectionName');
 	return { '@metadata': { 'Raven-Entity-Name': collectionName }};
 };
-
-exports.filter = filter;
