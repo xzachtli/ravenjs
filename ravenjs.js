@@ -2,7 +2,7 @@ var querystring = require('querystring'),
 	RavenClient = require('./lib/RavenClient'),
 	HiLoIdGenerator = require('./lib/HiLoIdGenerator'),
 	filter = require('./lib/filter');
-	_ = require('underscore');
+	_ = require('lodash');
 
 var settings = {
 	host: 'http://localhost:80',

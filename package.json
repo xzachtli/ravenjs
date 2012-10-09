@@ -9,7 +9,7 @@
 	"version": "1.0.2",		
 	"dependencies": {
 		"request": ">= 1.0.0",	
-		"underscore": ">= 1.0.0"
+		"lodash": "*"
 	},
 	"devDependencies": {
 		"nock": ">= 0.0.1"
