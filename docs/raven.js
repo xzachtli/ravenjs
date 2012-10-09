@@ -179,24 +179,40 @@ client.query('CityPopulation').results(function(error, data) {
 //Query filtering, sorting, projections and paging
 //-----------------------------------
 
-//Use the `where(fieldName, fieldValue)` method to spcify a query filter
+//Use the `where(fieldName).is(value)` method to spcify a query filter
 client.query('CityPopulation')
-	.where('City', 'Boston')
+	.where('City').is('Boston')
 	.results(function(error, data) {
 		console.log('Total Population of Boston: ' + data.Results[0].Count);
 	});
 
+//The `where('fieldName').is(value)` also accepts array, effectively issuing an AND filter
+client.query('CityPopulation')
+	.where('City').is(['Boston', 'New York'])
+	.results(function(error, data) {
+		console.log('Total Population of Boston and New York :' + data.Results[0].Count);
+	});
+
+//The `where('fieldName').isEither([])` effectively issues an OR filter
+client.query('Albums')
+	.where('Genre.Name').isEither(['Rock', 'Grunge'])
+	.results(function(error, data) {
+		for(var album in data.Results) {
+			console.log(album.Title);
+		}
+	});
+
 //You can chain filters using additional `where` or `and` filters
 client.query('Albums')
-	.where('Title', '*Great*')
-	.and('Genre.Name', 'Rock')
+	.where('Title').is('*Great*')
+	.and('Genre.Name').is('Rock')
 	.results(function(error, data) {
 		console.log('Total Rock Albums where title contains Great:' + data.TotalResults);
 	});
 
 //Use the `orderBy(fieldName)` to sort results
 client.query('Albums')
-	.where('Genre.Name', 'Rock')
+	.where('Genre.Name').is('Rock')
 	.orderBy('Title')
 	.results(function(error, data) {
 		for(var album in data.Results) {
@@ -206,7 +222,7 @@ client.query('Albums')
 
 //You can also sort descending
 client.query('Albums')
-	.where('Genre.Name', 'Rock')
+	.where('Genre.Name').is('Rock')
 	.orderByDescending('Title')
 	.results(function(error, data) {
 		for(var album in data.Results) {
@@ -216,7 +232,7 @@ client.query('Albums')
 
 //Use the `select([field,...]` to specify query projections.
 client.query('Albums')
-	.select('Title', 'Genre.Name')
+	.select('Title').is('Genre.Name')
 	.results(function(error, data) {
 		for(var album in data.Results) {
 			console.log(util.format('Album %s is of %s genre', album.Title, album.Name));
@@ -242,16 +258,19 @@ client.query('Albums')
 //the `collection()` method.
 
 //Issue a dynamic query on a collection
-client.query().collection('Persons').results(function(error, data) {
-	for(var person in data.Results) {
-		console.log(person.firstName);
-	}
-});
+client.query().collection('Persons')
+	.results(function(error, data) {
+		for(var person in data.Results) {
+			console.log(person.firstName);
+		}
+	});
 
 //Issue a dynamic query using a where filter
-client.query().where('Artist.Name', 'U2').results(function(error, data) {
-	console.log('Total Albums by U2: ' + data.TotalResults);
-});
+client.query()
+	.where('Artist.Name').is('U2')
+	.results(function(error, data) {
+		console.log('Total Albums by U2: ' + data.TotalResults);
+	});
 
 //Attachment Operations
 //=====================
