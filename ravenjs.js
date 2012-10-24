@@ -29,7 +29,7 @@ function defaultIdGenerator(doc, settings, callback) {
 	generator.nextId(function(error, id) {
 		if (error) return callback(error);
 		collectionName = '';
-		if (!!doc && !!doc['@metadata'] && _.isString(doc['@metadata']['Raven-Entity-Name'])) collectionName = doc['@metadata']['Raven-Entity-Name'] + '/';
+		if (!!doc && !!doc['@metadata'] && _.isString(doc['@metadata']['Raven-Entity-Name'])) collectionName = inflect.camelize(inflect.underscore(doc['@metadata']['Raven-Entity-Name']), false) + '/';
 		id = collectionName + id;
 		return callback(undefined, id.toString());
 	});

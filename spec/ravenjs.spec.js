@@ -267,6 +267,19 @@ describe('raven', function() {
 				done();
 			});
 		});
+		
+		it('should return id from hilo generator with collection name lower-camel-cased', function(done) {
+			spyOn(HiLoIdGenerator.prototype, 'nextId')
+				.andCallFake(function(cb) { cb(undefined, 123); });
+				
+			doc = { '@metadata': { 'Raven-Entity-Name': 'FooBars' } };
+
+			raven.defaultIdGenerator(doc, { host: 'foo' }, function(error, id) {
+				expect(error).not.toBeDefined();
+				expect(id).toBe('fooBars/123');
+				done();
+			});
+		});
 	});
 
 	describe('.connect', function() {

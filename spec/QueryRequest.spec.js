@@ -30,30 +30,36 @@ describe('QueryRequest', function() {
 			expect(function() { request.collection('bar'); }).toThrow();
 			expect(request.queryData.collection).not.toBeDefined();
 		});
+		
+		it('should properly pluralize if using typeName instead of collectionName', function() {
+			delete request.indexName;
+			request.collection('bar', true);
+			expect(request.queryData.collection).toBe('bars');
+		});
 	});
 	
-	describe('.query', function() {
+	describe('.lucene', function() {
 
 		it('should throw when luceneQuery is undefined', function() {
-			expect(function() { request.query(); }).toThrow();
-			expect(function() { request.query(null); }).toThrow();
-			expect(function() { request.query(undefined); }).toThrow();
+			expect(function() { request.lucene(); }).toThrow();
+			expect(function() { request.lucene(null); }).toThrow();
+			expect(function() { request.lucene(undefined); }).toThrow();
 		});
 
 		it('should throw when luceneQuery is not string', function() {
-			expect(function() { request.query({}, 'bar'); }).toThrow();
+			expect(function() { request.lucene({}, 'bar'); }).toThrow();
 		});
 		
 		it('should throw when where is already used', function() {
-			expect(function() { request.where('Foo').is('Bar').query('Foo:Bar'); }).toThrow();
+			expect(function() { request.where('Foo').is('Bar').lucene('Foo:Bar'); }).toThrow();
 		});
 		
-		it('should throw when query is already used', function() {
-			expect(function() { request.query('Foo:Bar').query('Foo:Bar'); }).toThrow();
+		it('should throw when lucene is already used', function() {
+			expect(function() { request.lucene('Foo:Bar').lucene('Foo:Bar'); }).toThrow();
 		});
 		
 		it('should apply query', function() {
-			request.query('Foo:Bar');
+			request.lucene('Foo:Bar');
 			expect(request.queryData.query).toBeDefined();
 			expect(request.queryData.query).toBe('Foo:Bar');
 		});
@@ -252,7 +258,7 @@ describe('QueryRequest', function() {
 				.reply(200, responseData);
 
 			request
-				.query('Baz:Boo')
+				.lucene('Baz:Boo')
 				.results(function(error, data) {
 					expect(error).not.toBeDefined();
 					expect(data).toBeDefined();
@@ -290,6 +296,20 @@ describe('QueryRequest', function() {
 				.reply(200, responseData);
 
 			request.collection('foo').results(function(error, data) {
+				expect(error).not.toBeDefined();
+				expect(data).toBeDefined();
+				ravendb.done();
+				done();
+			});
+		});
+		
+		it('should request dynamic index for typeName.', function(done) {
+			delete request.indexName;
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/dynamic/foos')
+				.reply(200, responseData);
+
+			request.collection('foo', true).results(function(error, data) {
 				expect(error).not.toBeDefined();
 				expect(data).toBeDefined();
 				ravendb.done();
