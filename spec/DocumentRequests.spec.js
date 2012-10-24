@@ -132,7 +132,7 @@ describe('DocumentRequests', function() {
 
 		it('should save using id from default id generator', function(done) {
 			request.settings.idFinder = function(doc) { return undefined; };
-			request.settings.idGenerator = function(doc, callback) {
+			request.settings.idGenerator = function(doc, settings, callback) {
 				callback(undefined, 101);
 			};
 

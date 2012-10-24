@@ -214,17 +214,21 @@ describe('raven', function() {
 	});
 
 	describe('.defaultIdGenerator', function() {
+	
+		it('should throw when doc is null', function() {
+			expect(function(){ raven.defaultIdGenerator(null, { host: 'foo' }); }).toThrow();
+		});
 
 		it('should throw when settings is null', function() {
-			expect(function(){ raven.defaultIdGenerator(null); }).toThrow();
+			expect(function(){ raven.defaultIdGenerator({}, null); }).toThrow();
 		});
 
 		it('should throw when setting does not have a host property', function() {
-			expect(function(){ raven.defaultIdGenerator({ }, null); }).toThrow();
+			expect(function(){ raven.defaultIdGenerator({}, { }, null); }).toThrow();
 		});
 
 		it('should throw when callback is null', function() {
-			expect(function() { raven.defaultIdGenerator({ host: 'foo' }); }).toThrow();
+			expect(function() { raven.defaultIdGenerator({}, { host: 'foo' }); }).toThrow();
 		});
 
 		it('should return error when hilo generator returns error', function(done) {
@@ -232,7 +236,7 @@ describe('raven', function() {
 			spyOn(HiLoIdGenerator.prototype, 'nextId')
 				.andCallFake(function(cb) { cb(new Error('Failed')); });
 
-			raven.defaultIdGenerator({ host: 'foo'}, function(error, id) {
+			raven.defaultIdGenerator({}, { host: 'foo'}, function(error, id) {
 				expect(error).toBeDefined();
 				expect(error.message).toBe('Failed');
 				expect(id).not.toBeDefined();
@@ -240,13 +244,26 @@ describe('raven', function() {
 			});
 		});
 
-		it('should return id from hilo generator', function(done) {
+		it('should return id from hilo generator without collection name', function(done) {
 			spyOn(HiLoIdGenerator.prototype, 'nextId')
 				.andCallFake(function(cb) { cb(undefined, 123); });
 
-			raven.defaultIdGenerator({ host: 'foo' }, function(error, id) {
+			raven.defaultIdGenerator({}, { host: 'foo' }, function(error, id) {
 				expect(error).not.toBeDefined();
 				expect(id).toBe('123');
+				done();
+			});
+		});
+		
+		it('should return id from hilo generator with collection name', function(done) {
+			spyOn(HiLoIdGenerator.prototype, 'nextId')
+				.andCallFake(function(cb) { cb(undefined, 123); });
+				
+			doc = { '@metadata': { 'Raven-Entity-Name': 'bars' } };
+
+			raven.defaultIdGenerator(doc, { host: 'foo' }, function(error, id) {
+				expect(error).not.toBeDefined();
+				expect(id).toBe('bars/123');
 				done();
 			});
 		});
@@ -320,21 +337,48 @@ describe('raven', function() {
 	});
 
 	describe('.create', function() {
-		it('should return a new object when collection name is not specified.', function() {
+		it('should return a new object when type name is not specified.', function() {
 			var obj = raven.create();
 			expect(obj).toBeDefined();
 			expect(obj['@metadata']).not.toBeDefined();
 		});
 
-		it('should throw when collection name is not a string', function() {
+		it('should throw when type name is not a string', function() {
 			expect(function() { raven.create(1); }).toThrow();
 			expect(function() { raven.create({ }); }).toThrow();
 		});
 
-		it('should create a object with specified raven entity name.', function() {
+		it('should create an object with specified type name and generated pluaralized collection name if no second arg.', function() {
 			var obj = raven.create('foo');
 			expect(obj).toBeDefined();
+			expect(obj['@metadata']['Raven-Clr-Type']).toBe('foo');
+			expect(obj['@metadata']['Raven-Entity-Name']).toBe('foos');
+		});
+		
+		it('should throw when collection name is not a string or bool', function() {
+			expect(function() { raven.create('foo', 1); }).toThrow();
+			expect(function() { raven.create('foo', { }); }).toThrow();
+		});
+
+		it('should create a object with specified raven clr-type and entity name.', function() {
+			var obj = raven.create('foo', 'foobars');
+			expect(obj).toBeDefined();
+			expect(obj['@metadata']['Raven-Clr-Type']).toBe('foo');
+			expect(obj['@metadata']['Raven-Entity-Name']).toBe('foobars');
+		});
+		
+		it('should create a object with specified raven clr-type and non-pluralized singular entity name.', function() {
+			var obj = raven.create('foo', false);
+			expect(obj).toBeDefined();
+			expect(obj['@metadata']['Raven-Clr-Type']).toBe('foo');
 			expect(obj['@metadata']['Raven-Entity-Name']).toBe('foo');
+		});
+		
+		it('should create a object with specified raven clr-type and pluralized entity name.', function() {
+			var obj = raven.create('foo', true);
+			expect(obj).toBeDefined();
+			expect(obj['@metadata']['Raven-Clr-Type']).toBe('foo');
+			expect(obj['@metadata']['Raven-Entity-Name']).toBe('foos');
 		});
 	});
 });

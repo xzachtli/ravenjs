@@ -1,8 +1,9 @@
 var querystring = require('querystring'),
 	RavenClient = require('./lib/RavenClient'),
 	HiLoIdGenerator = require('./lib/HiLoIdGenerator'),
-	filter = require('./lib/filter');
-	_ = require('lodash');
+	filter = require('./lib/filter'),
+	_ = require('lodash'),
+	inflect = require('i')();
 
 var settings = {
 	host: 'http://localhost:80',
@@ -18,7 +19,8 @@ function defaultIdFinder(doc) {
 	if (doc.hasOwnProperty('Id')) return doc.Id;
 }
 
-function defaultIdGenerator(settings, callback) {
+function defaultIdGenerator(doc, settings, callback) {
+	if (!doc) throw Error('Expected a valid doc object.');
 	if (!settings) throw Error('Expected a valid setings object.');
 	if (!settings.host) throw Error('Invalid settings. Expected host property.');
 	if (!callback || !_(callback).isFunction) throw Error('Exepected a valid callback function.');
@@ -26,6 +28,9 @@ function defaultIdGenerator(settings, callback) {
 	var generator = new HiLoIdGenerator(settings);
 	generator.nextId(function(error, id) {
 		if (error) return callback(error);
+		collectionName = '';
+		if (!!doc && !!doc['@metadata'] && _.isString(doc['@metadata']['Raven-Entity-Name'])) collectionName = doc['@metadata']['Raven-Entity-Name'] + '/';
+		id = collectionName + id;
 		return callback(undefined, id.toString());
 	});
 }
@@ -154,8 +159,30 @@ exports.connect = function(options) {
 	return new RavenClient(clientSettings);
 };
 
-exports.create = function(collectionName) {
-	if (arguments.length === 0) return { };
-	if (!_(collectionName).isString()) throw new Error('Expected a valid string for collectionName');
-	return { '@metadata': { 'Raven-Entity-Name': collectionName }};
+exports.create = function(typeName, collectionName) {
+	var doc = {},
+		metadata = {},
+		singular = false;
+	if (!!typeName) {
+		if (!_(typeName).isString()) throw new Error('Expected a valid string for typeName');
+		metadata['Raven-Clr-Type'] = typeName;
+	}
+	if (_(collectionName).isBoolean()) {
+		singular = collectionName === false;
+		collectionName = undefined;
+	}
+	if (!!collectionName) {
+		if (!_(collectionName).isString()) throw new Error('Expected a valid string or bool for collectionName');
+		metadata['Raven-Entity-Name'] = collectionName;
+	} else if (!!typeName) {
+		if (!singular) {
+			collectionName = inflect.pluralize(typeName);
+		} else {
+			collectionName = typeName;
+		}
+		metadata['Raven-Entity-Name'] = collectionName;
+	}
+	
+	if (!_.isEmpty(metadata)) doc['@metadata'] = metadata;
+	return doc;
 };
