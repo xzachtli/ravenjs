@@ -1,7 +1,8 @@
 var querystring = require('querystring'),
 	RavenClient = require('./lib/RavenClient'),
 	HiLoIdGenerator = require('./lib/HiLoIdGenerator'),
-	filter = require('./lib/filter'),
+	filter = require('./lib/filter')
+	errorCodes = require('./lib/errorCodes'),
 	_ = require('lodash'),
 	inflect = require('i')();
 
@@ -186,3 +187,5 @@ exports.create = function(typeName, collectionName) {
 	if (!_.isEmpty(metadata)) doc['@metadata'] = metadata;
 	return doc;
 };
+
+exports.errorCodes = errorCodes;

@@ -10,7 +10,8 @@
 	"dependencies": {
 		"request": ">= 1.0.0",	
 		"lodash": "*",
-		"i": "*"
+		"i": "*",
+		"q": "*"
 	},
 	"devDependencies": {
 		"nock": ">= 0.0.1"
