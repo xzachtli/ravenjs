@@ -147,13 +147,7 @@ describe('AttachmentRequests', function() {
 		});
 	});
 
-	xdescribe('.remove', function() {
-
-		it('should throw error when callback is undefined', function() {
-			expect(function() { request.remove(); }).toThrow();
-			expect(function() { request.remove(null); }).toThrow();
-			expect(function() { request.remove(undefined); }).toThrow();
-		});
+	describe('.remove', function() {
 
 		it('should send delete request', function(done) {
 			var ravendb = nock('http://localhost:81')
@@ -167,6 +161,22 @@ describe('AttachmentRequests', function() {
 			});
 		});
 
+		it('should resolve promise and send delete request', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.delete('/static/foo')
+				.reply(204);
+
+			request.remove()
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
+		});
+
 		it('should return error when response code is not 204', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.delete('/static/foo')
@@ -174,9 +184,29 @@ describe('AttachmentRequests', function() {
 
 			request.remove(function(error) {
 				expect(error).toBeDefined();
+				expect(error.number).toBe(errorCodes.ServerError);
+				expect(error.statusCode).toBe(500);
 				ravendb.done();
 				done();
 			});
+		});
+
+		it('should reject promise when response code is not 204', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.delete('/static/foo')
+				.reply(500);
+
+			request.remove()
+				.fail(function(error) {
+					expect(error).toBeDefined();
+					expect(error.number).toBe(errorCodes.ServerError);
+					expect(error.statusCode).toBe(500);
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
 		});
 	});
 });
