@@ -23,13 +23,6 @@ describe('IndexRequests', function() {
 			});
 		});
 
-		it('should throw when callback is undefined', function() {
-			request.indexName = 'foo';
-			expect(function() { request.create(); }).toThrow();
-			expect(function() { request.create(null); }).toThrow();
-			expect(function() { request.create(undefined); }).toThrow();
-		});
-
 		it('should throw when map expression is not specified.', function() {
 			request.indexName = 'foo';
 			expect(function() {
@@ -51,6 +44,24 @@ describe('IndexRequests', function() {
 				});
 		});
 
+		if('should resolve promise and create an index with map expression', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.put('/indexes/foo', { map: 'foo' })
+				.reply(201);
+
+			request
+				.map('foo')
+				.create()
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
+		});
+
 		it('should create an index with map and reduce expression', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.put('/indexes/foo', {map: 'foo', reduce: 'bar'})
@@ -64,6 +75,25 @@ describe('IndexRequests', function() {
 					ravendb.done();
 					done();
 				});
+		});
+
+		it('should resolve promise and create index with map and reduce expression.', function(done){
+			var ravendb = nock('http://localhost:81')
+				.put('/indexes/foo', {map: 'foo', reduce: 'bar'})
+				.reply(201);
+
+			request
+				.map('foo')
+				.reduce('bar')
+				.create()
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
 		});
 	});
 
@@ -91,12 +121,6 @@ describe('IndexRequests', function() {
 			}).toThrow();
 		});
 
-		it('should throw when callback function is undefined', function() {
-			expect(function() { request.remove(); }) .toThrow();
-			expect(function() { request.remove(null); }).toThrow();
-			expect(function() { request.remove(undefined); }).toThrow();
-		});
-
 		it('should delete the specified index.', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.delete('/indexes/foo')
@@ -107,6 +131,22 @@ describe('IndexRequests', function() {
 				ravendb.done();
 				done();
 			});
+		});
+
+		it('should resolve promise and delete the specified index', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.delete('/indexes/foo')
+				.reply(204);
+
+			request.remove()
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
 		});
 	});
 });

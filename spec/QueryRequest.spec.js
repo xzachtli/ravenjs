@@ -89,6 +89,7 @@ describe('QueryRequest', function() {
 	});
 
 	describe('.and', function() {
+		
 		it('should throw when filter field name is undefined', function() {
 			expect(function() { request.and(); }).toThrow();
 			expect(function() { request.and(null); }).toThrow();
@@ -114,6 +115,7 @@ describe('QueryRequest', function() {
 	});
 	
 	describe('.or', function() {
+		
 		it('should throw when filter field name is undefined', function() {
 			expect(function() { request.and(); }).toThrow();
 			expect(function() { request.and(null); }).toThrow();
@@ -202,6 +204,11 @@ describe('QueryRequest', function() {
 			request.skip(10);
 			expect(request.queryData.skip).toBe(10);
 		});
+
+		it('should not set skip when skip count is 0', function() {
+			request.skip(0);
+			expect(request.queryData.skip).not.toBeDefined();
+		})
 	});
 
 	describe('.take', function() {
@@ -217,6 +224,11 @@ describe('QueryRequest', function() {
 		it('should set query take count', function() {
 			request.take(10);
 			expect(request.queryData.take).toBe(10);
+		});
+
+		it('should not set take when take count is 0', function() {
+			request.take(0);
+			expect(request.queryData.take).not.toBeDefined();
 		});
 	});
 
@@ -236,20 +248,25 @@ describe('QueryRequest', function() {
 			});
 		});
 
-		it('should return error with data.', function(done) {
+		it('should resolve promise with specified index results', function(done) {
 			var ravendb = nock('http://localhost:81')
-				.get('/indexes/foo?query=(foo%3Abar)')
-				.reply(500, { error: 'Some error' }, { 'content-type': 'application/json; charset=utf-8' });
+				.get('/indexes/foo')
+				.reply(200, responseData, { 'content-type': 'application/json; charset=utf-8'});
 
 			request
-				.where('foo').is('bar')
-				.results(function(error, data) {
-					expect(error).toBeDefined();
+				.results()
+				.then(function(data) {
 					expect(data).toBeDefined();
-					expect(data.error).toBe('Some error');
+					expect(data.Results.length).toBe(2);
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
 					ravendb.done();
 					done();
-				});
+				})
+				.done();
 		});
 		
 		it('should request index with query filter', function(done) {
@@ -267,6 +284,27 @@ describe('QueryRequest', function() {
 				});
 		});
 
+		it('should resolve promise and request index with query filter', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?query=Baz%3ABoo')
+				.reply(200, responseData);
+
+			request
+				.lucene('Baz:Boo')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
+		});
+
 		it('should request index with where filter', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.get('/indexes/foo?query=(Baz%3ABoo)')
@@ -281,6 +319,26 @@ describe('QueryRequest', function() {
 					done();
 				});
 		});
+
+		it('should resolve promise and request index with where filter', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?query=(Baz%3ABoo)')
+				.reply(200, responseData);
+
+			request.where('Baz').is('Boo')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
+		})
 
 		it('should throw when index name is not specified and no collection or filters specified', function(){
 			delete request.indexName;
@@ -302,6 +360,26 @@ describe('QueryRequest', function() {
 				done();
 			});
 		});
+
+		it('should resolve promise and request dynamic index for collection', function(done) {
+			delete request.indexName;
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/dynamic/foo')
+				.reply(200, responseData);
+
+			request.collection('foo')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				});
+		});	
 		
 		it('should request dynamic index for typeName.', function(done) {
 			delete request.indexName;
@@ -317,6 +395,26 @@ describe('QueryRequest', function() {
 			});
 		});
 
+		it('should resolve promise and request dynamic index for typeName', function(done) {
+			delete request.indexName;
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/dynamic/foos')
+				.reply(200, responseData);
+
+			request.collection('foo', true)
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				});
+		});
+
 		it('should request dynamic index for query', function(done) {
 			delete request.indexName;
 			var ravendb = nock('http://localhost:81')
@@ -328,6 +426,26 @@ describe('QueryRequest', function() {
 				.results(function(error, data) {
 					expect(error).not.toBeDefined();
 					expect(data).toBeDefined();
+					ravendb.done();
+					done();
+				});
+		});
+
+		it('should resolve promise and request dynamic index for query', function(done) {
+			delete request.indexName;
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/dynamic?query=(foo%3Abar)')
+				.reply(200, responseData);
+
+			request.where('foo').is('bar')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
 					ravendb.done();
 					done();
 				});
@@ -349,6 +467,27 @@ describe('QueryRequest', function() {
 				});
 		});
 
+		if ('should resolve promise and request query with multiple where filters', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?query=(Baz%3ABoo%20AND%20Bar%3ABaz)')
+				.reply(200, responseData);
+
+			request
+				.where('Baz').is('Boo')
+				.and('Bar').is('Baz')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				});
+		});
+
 		it('should request query with select values', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.get('/indexes/foo?fetch=Foo&fetch=Bar')
@@ -358,6 +497,25 @@ describe('QueryRequest', function() {
 				.results(function(error, data) {
 					expect(error).not.toBeDefined();
 					expect(data).toBeDefined();
+					ravendb.done();
+					done();
+				});
+		});
+
+		if('should resolve promise and query with select values', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?fetch=Foo&fetch=Bar')
+				.reply(200, responseData);
+
+			request.select('Foo', 'Bar')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
 					ravendb.done();
 					done();
 				});
@@ -376,6 +534,26 @@ describe('QueryRequest', function() {
 			});
 		});
 
+		it('should resolve promise and query with ordering', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?sort=Bar')
+				.reply(200, responseData);
+
+			request.orderBy('Bar')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
+		});
+
 		it('should request query with descending order', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.get('/indexes/foo?sort=-Bar')
@@ -387,6 +565,26 @@ describe('QueryRequest', function() {
 				ravendb.done();
 				done();
 			});
+		});
+
+		if ('should resolve promise and query with descending order', function(data) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?sort=-Bar')
+				.reply(200, responseData);
+
+			request.orderByDescending('Bar')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
 		});
 
 		it('should request query with skip count', function(done) {
@@ -402,6 +600,25 @@ describe('QueryRequest', function() {
 			});
 		});
 
+		it('should resolve promise and query with skip count', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?start=1')
+				.reply(200, responseData);
+
+			request.skip(1).results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
+		});
+
 		it('should request query with take count', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.get('/indexes/foo?pageSize=20')
@@ -413,6 +630,26 @@ describe('QueryRequest', function() {
 				ravendb.done();
 				done();
 			});
+		});
+
+		it('should resolve promise and query with take count', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?pageSize=20')
+				.reply(200, responseData);
+
+			request.take(20)
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(data).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
 		});
 
 		it('should request query with all operators', function(done) {
@@ -434,13 +671,36 @@ describe('QueryRequest', function() {
 					done();
 				});
 		});
+
+		it('should resolve promise and query with all operators', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.get('/indexes/foo?query=(foo%3Abar%20AND%20bar%3Abaz)&fetch=foo&sort=bar&start=10&pageSize=100')
+				.reply(200, responseData);
+
+			request.where('foo').is('bar')
+				.and('bar').is('baz')
+				.select('foo')
+				.orderBy('bar')
+				.skip(10)
+				.take(100)
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function(){
+					ravendb.done();
+					done();
+				})
+				.done();
+		})
 		
 		it('should generate complex WHERE/AND query', function(done) {
 			var ravendb = nock('http://localhost:81')
-				.filteringPath(function(path) {
-				
+				.filteringPath(function(path) {	
 					expect(path).toEqual('/indexes/foo?query=(foo%3Abar%20AND%20(Boo%3AFoo%20AND%20faz%3Abuz)%20AND%20bar%3Abaz)');
-					
 					return '/alwaysWorks'
 				})
 				.get('/alwaysWorks')
@@ -456,13 +716,39 @@ describe('QueryRequest', function() {
 					done();
 				});
 		});
+
+		it('should resolve promise and generate complex WHERE/AND query', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.filteringPath(function(path) {	
+					expect(path).toEqual('/indexes/foo?query=(foo%3Abar%20AND%20(Boo%3AFoo%20AND%20faz%3Abuz)%20AND%20bar%3Abaz)');
+					return '/alwaysWorks'
+				})
+				.get('/alwaysWorks')
+				.reply(200, responseData);
+
+			request.where('foo').is('bar')
+				.where(function(query) {
+					query.where('Boo').is('Foo').and('faz').is('buz');
+				})
+				.and('bar').is('baz')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
+		});
 		
 		it('should generate complex WHERE/OR query', function(done) {
 			var ravendb = nock('http://localhost:81')
 				.filteringPath(function(path) {
-				
 					expect(path).toEqual('/indexes/foo?query=(foo%3Abar%20OR%20(Boo%3AFoo%20OR%20faz%3Abuz)%20OR%20bar%3Abaz)');
-					
 					return '/alwaysWorks'
 				})
 				.get('/alwaysWorks')
@@ -477,6 +763,32 @@ describe('QueryRequest', function() {
 					ravendb.done();
 					done();
 				});
+		});
+
+		it('should resolve promise and generate complex WHERE/OR query', function(done) {
+			var ravendb = nock('http://localhost:81')
+				.filteringPath(function(path) {
+					expect(path).toEqual('/indexes/foo?query=(foo%3Abar%20OR%20(Boo%3AFoo%20OR%20faz%3Abuz)%20OR%20bar%3Abaz)');
+					return '/alwaysWorks'
+				})
+				.get('/alwaysWorks')
+				.reply(200, responseData);
+
+			request.where('foo').is('bar')
+				.or(function(query) { query.where('Boo').is('Foo').or('faz').is('buz');})
+				.or('bar').is('baz')
+				.results()
+				.then(function(data) {
+					expect(data).toBeDefined();
+				})
+				.fail(function(error) {
+					expect(error).not.toBeDefined();
+				})
+				.fin(function() {
+					ravendb.done();
+					done();
+				})
+				.done();
 		});
 	});
 });
