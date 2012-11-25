@@ -6,7 +6,7 @@
 		"type": "git",
 		"url": "https://github.com/riteshrao/ravenjs.git"
 	},
-	"version": "1.1.0",		
+	"version": "1.1.1",		
 	"dependencies": {
 		"request": ">= 1.0.0",	
 		"lodash": "*",
