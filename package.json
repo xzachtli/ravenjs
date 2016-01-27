@@ -1,26 +1,35 @@
 {
-	"name": "ravenjs",	
-	"description": "A RavenDB client node module.",
-	"author": "Ritesh Rao <rao.ritesh@gmail.com>",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/riteshrao/ravenjs.git"
-	},
-	"version": "1.1.1",		
-	"dependencies": {
-		"request": ">= 1.0.0",	
-		"lodash": "*",
-		"i": "*",
-		"q": "*"
-	},
-	"devDependencies": {
-		"nock": ">= 0.0.1"
-	},
-	"keywords":[
-		"ravendb",
-		"raven",
-		"ravenjs"
-	],
-	"license": "MIT",
-	"main": "./ravenjs.js"
+  "name": "ravenjs",
+  "description": "A RavenDB client node module.",
+  "author": {
+    "name": "Ritesh Rao",
+    "email": "rao.ritesh@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riteshrao/ravenjs.git"
+  },
+  "version": "1.1.1",
+  "dependencies": {
+    "request": ">= 1.0.0",
+    "lodash": "*",
+    "i": "*",
+    "q": "*"
+  },
+  "devDependencies": {
+    "nock": ">= 0.0.1"
+  },
+  "keywords": [
+    "ravendb",
+    "raven",
+    "ravenjs"
+  ],
+  "license": "MIT",
+  "main": "./ravenjs.js",
+  "readme": "ravenjs - A RavenDB node module.\n=======\n\nLicense\n=======\nravenjs is released under the [MIT License] (http://www.opensource.org/licenses/MIT)\n\nInstalling\n==========\n\nUse NPM to install ravenjs:\n\n`npm install ravenjs`\n\nDocumentation\n=============\nVisit the [ravenjs Guide] (http://riteshrao.github.com/ravenjs/) page for documentation and getting started with ravenjs.",
+  "_id": "ravenjs@1.1.1",
+  "dist": {
+    "shasum": "23cca9ad3be610b7ef1ff8fc1b34465d608a37b5"
+  },
+  "_from": "ravenjs@1.1.1"
 }

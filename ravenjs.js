@@ -10,7 +10,8 @@ var settings = {
 	host: 'http://localhost:80',
 	idFinder: defaultIdFinder,
 	idGenerator: defaultIdGenerator,
-	useOptimisticConcurrency: false
+	useOptimisticConcurrency: false,
+	hiLo: false
 };
 
 function defaultIdFinder(doc) {
@@ -20,20 +21,29 @@ function defaultIdFinder(doc) {
 	if (doc.hasOwnProperty('Id')) return doc.Id;
 }
 
-function defaultIdGenerator(doc, settings, callback) {
-	if (!doc) throw Error('Expected a valid doc object.');
+function defaultIdGenerator(settings) {
 	if (!settings) throw Error('Expected a valid setings object.');
 	if (!settings.host) throw Error('Invalid settings. Expected host property.');
-	if (!callback || !_(callback).isFunction) throw Error('Exepected a valid callback function.');
 
-	var generator = new HiLoIdGenerator(settings);
-	generator.nextId(function(error, id) {
-		if (error) return callback(error);
-		collectionName = '';
-		if (!!doc && !!doc['@metadata'] && _.isString(doc['@metadata']['Raven-Entity-Name'])) collectionName = inflect.camelize(inflect.underscore(doc['@metadata']['Raven-Entity-Name']), false) + '/';
-		id = collectionName + id;
-		return callback(undefined, id.toString());
-	});
+	var generator;
+	if (settings.hiLo) {
+		generator = new HiLoIdGenerator(settings);
+	} else {
+		generator = { nextId: function(callback) { callback(null, ''); } }
+	}
+
+	return function(doc, callback) {
+		if (!doc) throw Error('Expected a valid doc object.');
+		if (!callback || !_(callback).isFunction) throw Error('Exepected a valid callback function.');
+
+		generator.nextId(function(error, id) {
+			if (error) return callback(error);
+			var collectionName = '';
+			if (!!doc && !!doc['@metadata'] && _.isString(doc['@metadata']['Raven-Entity-Name'])) collectionName = inflect.camelize(inflect.underscore(doc['@metadata']['Raven-Entity-Name']), false) + '/';
+			var id = collectionName + id;
+			return callback(undefined, id.toString());
+		});
+	};
 }
 
 exports.connectionString = function(connStr) {
@@ -114,6 +124,15 @@ exports.idGenerator = function(fn) {
 	settings.idGenerator = fn;
 };
 
+exports.hiLo = function(hiLo) {
+	if (!arguments.length) return settings.hiLo;
+	if (!hiLo) {
+		settings.hiLo = false;
+	} else {
+		settings.hiLo = true;
+	}
+}
+
 exports.useOptimisticConcurrency= function(val) {
 	if (!val) return settings.useOptimisticConcurrency;
 	if (!_(val).isBoolean()) throw new Error('Expected a boolean value when setting useOptimisticConcurrency');
@@ -153,9 +172,11 @@ exports.connect = function(options) {
 		clientSettings.apiKey = options.apiKey || clientSettings.apiKey;
 		clientSettings.idFinder = options.idFinder || clientSettings.idFinder;
 		clientSettings.idGenerator = options.idGenerator || clientSettings.idGenerator;
+		clientSettings.hiLo = options.hiLo || clientSettings.hiLo;
 		clientSettings.proxy = options.proxy || clientSettings.proxy;
 		clientSettings.useOptimisticConcurrency = options.useOptimisticConcurrency || clientSettings.useOptimisticConcurrency;
 	}
+	clientSettings.idGenerator = clientSettings.idGenerator(clientSettings);
 	
 	return new RavenClient(clientSettings);
 };
